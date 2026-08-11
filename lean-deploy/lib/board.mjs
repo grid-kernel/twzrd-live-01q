@@ -310,7 +310,7 @@ function liveDiagnosis(funnel, day0) {
 }
 
 // src/lib/board-snapshot.ts
-var BOARD_VERSION = "1.1.0";
+var BOARD_VERSION = "1.1.1";
 var BOARD_ID = "twzrd-live-0-1q";
 var DOGFOOD_CMD = `npm i twzrd-x402-gate@0.8.14 x402-solana@2.1.0 @x402/core @x402/fetch @x402/svm @solana/kit @scure/base
 node node_modules/twzrd-x402-gate/bin/twzrd-gate-eval-refuse.js`;

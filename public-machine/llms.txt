@@ -3,10 +3,11 @@
 > Operator board for getting intel.twzrd.xyz from live infra to live demand in Q1.
 > Humans use the UI. Agents should start here and prefer JSON endpoints.
 > **Canonical multi-agent host.** SPRAT CF strategy is folded into `/api/board` → `cf_strategy`.
+> SPRAT GitHub = source extract / history only (not a second start-here).
 
 schema: twzrd.live_board/v1
-version: 1.1.0
-generated_at: 2026-08-11T22:11:20.304Z
+version: 1.1.1
+generated_at: 2026-08-11T22:25:27.407Z
 
 ## Routing (locked)
 
@@ -16,6 +17,7 @@ Live Board /llms.txt → /api/board  — start here (execution + CF strategy)
   board.next_actions / moves        — Path B 0→1Q execution
   board.live                        — day0 funnel + intel health
 intel.twzrd.xyz                     — product (should I pay?)
+SPRAT GitHub                        — extract / history only
 ```
 
 | Agent needs… | Point at… |
@@ -41,14 +43,14 @@ Advisory demand exists without enforcement. Free cards are happening; nobody has
 
 | Stage | Value | Status |
 |---|---:|---|
-| External free cards | 16 | thin |
+| External free cards | 33 | thin |
 | Gate evals (Path B) | 0 | empty |
 | Gate blocks | 0 | empty |
 | Paid trust external | 0 | empty |
 
 ## CF strategy (`cf_strategy` — SPRAT fold)
 
-schema: twzrd.cf_strategy/v1 · source 1.1.0 · live_source=true
+schema: twzrd.cf_strategy/v1 · source 1.2.0 (source_extract) · live_source=true
 
 **Thesis:** Own the rails that put every Cloudflare Agent on Solana.
 
@@ -59,16 +61,25 @@ Cloudflare owns agent distribution. Solana owns settlement speed. SPRAT by TWZRD
 - ship_now: workers-hono, preflight, portable-proof
 - hold: mcp-svm, cf-wallets
 - ready_not_shipped: token-policy
-- guardrail: Flood Solana volume through live Workers + x402-hono + intel facilitator. Do not pre-build speculative CF Wallets scopes. Do not engineer Agents MCP SVM this week without an explicit spike go. Signal B is not product until CF registers SVM (or you ship a companion package after a written go/no-go).
+- guardrail: Flood Solana volume through live Workers + x402-hono + intel facilitator. Do not pre-build speculative CF Wallets scopes. Do not engineer Agents MCP SVM this week without an explicit spike go.
 
 ### Signals
 
 - **A** `cf-wallets-api` (watch): Stable documentable Virtual Wallet API with create/list/fund ops.
-- **B** `mcp-x402-svm` (watch): Agents MCP registers SVM scheme on both server and client; Solana in network map; changelog mentions Solana/SVM x402.
+- **B** `mcp-x402-svm` (watch): Agents MCP registers SVM scheme on both server and client; Solana in network map.
+
+### Supply lanes
+
+- **workers-hono** (live) — Workers Solana sell: x402-hono + TWZRD facilitator on mainnet USDC.
+- **preflight** (live) — Preflight intel gate: Seller wallet reputation + price sanity.
+- **portable-proof** (live) — Portable proof upsell (P5): Funnel measuring from clean zero.
+- **mcp-svm** (watch) — Agents MCP @x402/svm: Agents MCP still EVM-only. Foundation @x402/svm exists; CF has not registered it.
+- **cf-wallets** (watch) — Cloudflare Wallets API: Handle reservation live; Virtual Wallet API still coming.
+- **token-policy** (ready) — CF token mint policy: Per-job token policy ready.
 
 **Not this board:** Pay decisions → https://intel.twzrd.xyz/v1/intel/preflight — never this board
 
-Source extract: https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json
+Source extract (optional mirror): https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-brief@main/sprat.json
 
 ## Machine endpoints (prefer these)
 
@@ -138,20 +149,7 @@ Expected: signer_invocation_count=0 payment_retry_count=0
 - https://intel.twzrd.xyz/health — Day0 counters
 - https://intel.twzrd.xyz/v1/intel/preflight — Pay decisions (product)
 - https://twzrd.xyz — Product front door
-- https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json — SPRAT source extract
+- https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-brief@main/sprat.json — SPRAT source extract (history only, not a second host)
 
 Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`.
-
-## Public hosts for agents
-
-Primary (Vercel, CORS open):
-- https://twzrd-live-01q-host.vercel.app/llms.txt
-- https://twzrd-live-01q-host.vercel.app/api/board
-- https://twzrd-live-01q-host.vercel.app/api/board/status
-- https://twzrd-live-01q-host.vercel.app/api/board/moves
-- https://twzrd-live-01q-host.vercel.app/api/openapi.json
-- https://twzrd-live-01q-host.vercel.app/api/intel-health
-
-Mirror (GitHub raw):
-- https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/llms.txt
-- https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/board.json
+SPRAT GitHub is extract only — start here at Live Board, not SPRAT.

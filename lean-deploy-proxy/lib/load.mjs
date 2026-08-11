@@ -1,5 +1,8 @@
 const RAW_BASE = "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine";
-const SPRAT = "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json";
+const SPRAT_URLS = [
+  "https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-brief@main/sprat.json",
+  "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json",
+];
 
 export async function loadBoardJson() {
   const r = await fetch(`${RAW_BASE}/board.json`, { cache: "no-store" });
@@ -58,54 +61,63 @@ export async function loadBoardJson() {
   } catch (e) {
     board.live = { ...(board.live || {}), ok: false, error: String(e), fetched_at: new Date().toISOString() };
   }
-  // Refresh cf_strategy from live SPRAT when possible
-  try {
-    const s = await fetch(SPRAT, { cache: "no-store" });
-    if (s.ok && board.cf_strategy) {
-      const sprat = await s.json();
-      board.cf_strategy = {
-        ...board.cf_strategy,
-        source_schema_version: sprat.schema_version || board.cf_strategy.source_schema_version,
-        source_generated_at: sprat.generated_at,
-        thesis: sprat.thesis || board.cf_strategy.thesis,
-        decision: {
-          ...board.cf_strategy.decision,
-          summary: sprat.decision_2026_08_11?.summary || board.cf_strategy.decision?.summary,
-          pick: sprat.decision_2026_08_11?.pick || board.cf_strategy.decision?.pick,
-          ship_now: sprat.decision_2026_08_11?.ship_now || board.cf_strategy.decision?.ship_now,
-          do_not: sprat.decision_2026_08_11?.do_not || board.cf_strategy.decision?.do_not,
-        },
-        supply_lanes: sprat.supply_lanes || board.cf_strategy.supply_lanes,
-        posture: sprat.posture || board.cf_strategy.posture,
-        signals: board.cf_strategy.signals,
-        live_source: true,
-        fetched_at: new Date().toISOString(),
+  // Refresh cf_strategy from live SPRAT (jsDelivr first — raw CDN may lag)
+  let spratHit = null;
+  for (const url of SPRAT_URLS) {
+    try {
+      const s = await fetch(url, { cache: "no-store" });
+      if (s.ok) {
+        spratHit = { sprat: await s.json(), url };
+        break;
+      }
+    } catch {
+      // try next
+    }
+  }
+  if (spratHit && board.cf_strategy) {
+    const { sprat, url } = spratHit;
+    board.cf_strategy = {
+      ...board.cf_strategy,
+      source: url,
+      source_schema_version: sprat.schema_version || board.cf_strategy.source_schema_version,
+      source_role: sprat.role || sprat.provenance?.role || board.cf_strategy.source_role || "source_extract",
+      source_generated_at: sprat.generated_at,
+      thesis: sprat.thesis || board.cf_strategy.thesis,
+      decision: {
+        ...board.cf_strategy.decision,
+        summary: sprat.decision_2026_08_11?.summary || board.cf_strategy.decision?.summary,
+        pick: sprat.decision_2026_08_11?.pick || board.cf_strategy.decision?.pick,
+        ship_now: sprat.decision_2026_08_11?.ship_now || board.cf_strategy.decision?.ship_now,
+        do_not: sprat.decision_2026_08_11?.do_not || board.cf_strategy.decision?.do_not,
+      },
+      supply_lanes: sprat.supply_lanes || board.cf_strategy.supply_lanes,
+      posture: sprat.posture || board.cf_strategy.posture,
+      signals: board.cf_strategy.signals,
+      live_source: true,
+      fetched_at: new Date().toISOString(),
+    };
+    if (sprat.signals?.A) {
+      board.cf_strategy.signals.A = {
+        ...board.cf_strategy.signals.A,
+        id: sprat.signals.A.id,
+        status: sprat.signals.A.status,
+        fires_when: sprat.signals.A.fires_when,
       };
-      if (sprat.signals?.A) {
-        board.cf_strategy.signals.A = {
-          ...board.cf_strategy.signals.A,
-          id: sprat.signals.A.id,
-          status: sprat.signals.A.status,
-          fires_when: sprat.signals.A.fires_when,
-        };
-      }
-      if (sprat.signals?.B) {
-        board.cf_strategy.signals.B = {
-          ...board.cf_strategy.signals.B,
-          id: sprat.signals.B.id,
-          status: sprat.signals.B.status,
-          fires_when: sprat.signals.B.fires_when,
-          probe: sprat.signals.B.probe,
-          probe_hint: sprat.signals.B.probe_hint,
-          related_issues: sprat.signals.B.related_issues,
-        };
-      }
     }
-  } catch {
-    if (board.cf_strategy) {
-      board.cf_strategy.live_source = false;
-      board.cf_strategy.fetched_at = new Date().toISOString();
+    if (sprat.signals?.B) {
+      board.cf_strategy.signals.B = {
+        ...board.cf_strategy.signals.B,
+        id: sprat.signals.B.id,
+        status: sprat.signals.B.status,
+        fires_when: sprat.signals.B.fires_when,
+        probe: sprat.signals.B.probe,
+        probe_hint: sprat.signals.B.probe_hint,
+        related_issues: sprat.signals.B.related_issues,
+      };
     }
+  } else if (board.cf_strategy) {
+    board.cf_strategy.live_source = false;
+    board.cf_strategy.fetched_at = new Date().toISOString();
   }
   return board;
 }
@@ -115,6 +127,7 @@ export function compactCf(cf) {
   return {
     schema: cf.schema,
     source_schema_version: cf.source_schema_version,
+    source_role: cf.source_role,
     live_source: cf.live_source,
     pick: cf.decision?.pick,
     thesis: cf.thesis?.headline,

@@ -1,8 +1,41 @@
 {
   "schema": "twzrd.live_board_moves/v1",
   "id": "twzrd-live-0-1q",
-  "version": "1.1.0",
-  "generated_at": "2026-08-11T21:55:54.572Z",
+  "version": "1.1.1",
+  "generated_at": "2026-08-11T22:25:27.247Z",
+  "count": 12,
+  "phases": [
+    {
+      "id": "truth",
+      "label": "01 · Truth",
+      "subtitle": "Separate live infra from live demand",
+      "outcome": "One north-star metric board that only counts external demand."
+    },
+    {
+      "id": "wedge",
+      "label": "02 · Wedge",
+      "subtitle": "Path B is the product, not preflight alone",
+      "outcome": "Every install demo ends with refuse-before-sign (signer=0)."
+    },
+    {
+      "id": "proof",
+      "label": "03 · Proof",
+      "subtitle": "Make the gate dogfoodable in under 5 minutes",
+      "outcome": "A cold machine can prove Path B without a wallet or USDC."
+    },
+    {
+      "id": "distribution",
+      "label": "04 · Distribution",
+      "subtitle": "Put the gate where agents already pay",
+      "outcome": "3 embed seats live + weekly outbound that creates gate_evals."
+    },
+    {
+      "id": "convert",
+      "label": "05 · Convert",
+      "subtitle": "Free card → gate install → optional V6 proof",
+      "outcome": "First external paid trust + first external gate_evals > 0."
+    }
+  ],
   "moves": [
     {
       "id": "truth-external-only",
@@ -236,110 +269,6 @@
       "impact": "medium",
       "horizon": "quarter",
       "impact_weight": 1,
-      "done": false
-    }
-  ],
-  "next_actions": [
-    {
-      "id": "truth-external-only",
-      "phase": "truth",
-      "title": "Pin external-only Day0 on the wall",
-      "why": "Health already separates free_card_hits_external from internal swarm. If you manage to total hits, you will celebrate dogfood and miss that demand is near zero.",
-      "how": [
-        "Dashboard tile: free_card_hits_external, gate_evals, paid_trust_payer_external only.",
-        "Never report free_card_hits_internal in investor/partner decks.",
-        "Add a weekly screenshot of /health day0.door_zero with external basis."
-      ],
-      "metric": "Team can recite external free cards, gate_evals, paid_trust_external from memory",
-      "impact": "critical",
-      "horizon": "this_week",
-      "links": [
-        {
-          "label": "Live health",
-          "href": "https://intel.twzrd.xyz/health"
-        }
-      ],
-      "impact_weight": 5,
-      "done": false
-    },
-    {
-      "id": "truth-north-star",
-      "phase": "truth",
-      "title": "Declare Path B north star for Q1",
-      "why": "Preflight is advisory. Paid V6 is portable proof. Neither is enforcement. Live 0→1 means a client honors block before signTransaction.",
-      "how": [
-        "Write one sentence: Success = external gate_evals with signer_invocation_count=0 on refuse.",
-        "Secondary: external free cards. Tertiary: paid_trust_payer_external.",
-        "Kill any metric that rewards internal template alias hits."
-      ],
-      "metric": "gate_evals (external) is the only primary OKR",
-      "impact": "critical",
-      "horizon": "this_week",
-      "impact_weight": 5,
-      "done": false
-    },
-    {
-      "id": "wedge-path-b",
-      "phase": "wedge",
-      "title": "Lead every conversation with refuse-before-sign",
-      "why": "MCP tools and free preflight create awareness but do not block spend. The install that refuses is the wedge competitors cannot soft-ship as a dashboard.",
-      "how": [
-        "Hero line: Before your agent signs, TWZRD can refuse.",
-        "Demo order: refuse fixture → gate eval → transcript with signer=0.",
-        "Only then show MCP / merchant_card / V6 as supporting rails."
-      ],
-      "metric": "100% of partner demos show Path B first",
-      "impact": "critical",
-      "horizon": "this_week",
-      "links": [
-        {
-          "label": "Refuse fixture",
-          "href": "https://intel.twzrd.xyz/v1/intel/refuse-fixture"
-        },
-        {
-          "label": "llms.txt",
-          "href": "https://intel.twzrd.xyz/llms.txt"
-        }
-      ],
-      "impact_weight": 5,
-      "done": false
-    },
-    {
-      "id": "proof-cold-machine",
-      "phase": "proof",
-      "title": "Cold-machine Path B under 5 minutes",
-      "why": "Optional peers of the gate are not auto-installed. Broken first runs kill distribution. Q1 lives or dies on frictionless dogfood.",
-      "how": [
-        "Publish a single copy-paste block that installs gate + peers + runs refuse eval.",
-        "Record expected: signer_invocation_count=0 payment_retry_count=0.",
-        "File every break report as a P0 until the script is green on a fresh machine."
-      ],
-      "metric": "3 independent people complete refuse proof without help",
-      "impact": "critical",
-      "horizon": "this_week",
-      "links": [
-        {
-          "label": "Gate package",
-          "href": "https://www.npmjs.com/package/twzrd-x402-gate"
-        }
-      ],
-      "impact_weight": 5,
-      "done": false
-    },
-    {
-      "id": "wedge-message",
-      "phase": "wedge",
-      "title": "Freeze a one-screen message hierarchy",
-      "why": "Current surfaces list 24 tools, settle rails, market data, and watch hooks. 0→1 needs a single sentence and a single install path.",
-      "how": [
-        "Primary: Machine trust for autonomous spend — block before sign.",
-        "Proof: npm i twzrd-x402-gate + refuse eval binary.",
-        "Optional: hosted MCP for discovery; V6 only after trust is enforced."
-      ],
-      "metric": "One paragraph + one command on every surface (intel, X, Smithery blurb)",
-      "impact": "high",
-      "horizon": "this_week",
-      "impact_weight": 3,
       "done": false
     }
   ]

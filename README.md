@@ -12,7 +12,7 @@ Includes folded **CF strategy** (`cf_strategy` from SPRAT) so other AIs have one
 - Board: https://twzrd-live-01q-host.vercel.app/api/board (includes `cf_strategy`)
 - OpenAPI: https://twzrd-live-01q-host.vercel.app/api/openapi.json
 
-CORS open · no auth · schema `twzrd.live_board/v1` · version `1.1.0`
+CORS open · no auth · schema `twzrd.live_board/v1` · version `1.1.1`
 
 Pay decisions → https://intel.twzrd.xyz/v1/intel/preflight (not this board).
 

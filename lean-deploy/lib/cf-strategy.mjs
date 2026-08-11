@@ -1,6 +1,9 @@
 /** CF→Solana strategy block folded from SPRAT into Live Board. */
-export const SPRAT_SOURCE_URL =
-  "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json";
+export const SPRAT_SOURCE_URLS = [
+  "https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-brief@main/sprat.json",
+  "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json",
+];
+export const SPRAT_SOURCE_URL = SPRAT_SOURCE_URLS[1];
 
 export const CF_STRATEGY_SCHEMA = "twzrd.cf_strategy/v1";
 
@@ -8,8 +11,9 @@ const EMBEDDED = {
   "schema": "twzrd.cf_strategy/v1",
   "source": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json",
   "source_schema": "https://twzrd.xyz/schema/sprat-manifest/v1",
-  "source_schema_version": "1.1.0",
-  "source_generated_at": "2026-08-11T21:45:00.000Z",
+  "source_schema_version": "1.2.0",
+  "source_role": "source_extract",
+  "source_generated_at": "2026-08-11T22:18:31.000Z",
   "thesis": {
     "headline": "Own the rails that put every Cloudflare Agent on Solana.",
     "subcopy": "Cloudflare owns agent distribution. Solana owns settlement speed. SPRAT by TWZRD is the trust + x402 facilitator middle."
@@ -253,6 +257,7 @@ function mapSprat(sprat) {
     source: SPRAT_SOURCE_URL,
     source_schema: sprat.schema,
     source_schema_version: sprat.schema_version ?? "unknown",
+    source_role: sprat.role || sprat.provenance?.role || "source_extract",
     source_generated_at: sprat.generated_at,
     thesis: sprat.thesis ?? EMBEDDED.thesis,
     decision: {
@@ -300,19 +305,27 @@ function mapSprat(sprat) {
   };
 }
 
+function mapSpratWithSource(sprat, url) {
+  const mapped = mapSprat(sprat);
+  mapped.source = url;
+  mapped.source_role = sprat.role || sprat.provenance?.role || mapped.source_role || "source_extract";
+  return mapped;
+}
+
 export async function loadCfStrategy() {
   const fetched_at = new Date().toISOString();
-  try {
-    const res = await fetch(SPRAT_SOURCE_URL, {
-      headers: { accept: "application/json" },
-      cache: "no-store",
-    });
-    if (res.ok) {
+  for (const url of SPRAT_SOURCE_URLS) {
+    try {
+      const res = await fetch(url, {
+        headers: { accept: "application/json" },
+        cache: "no-store",
+      });
+      if (!res.ok) continue;
       const sprat = await res.json();
-      return { ...mapSprat(sprat), fetched_at, live_source: true };
+      return { ...mapSpratWithSource(sprat, url), fetched_at, live_source: true };
+    } catch {
+      // try next
     }
-  } catch {
-    // embedded
   }
   return { ...EMBEDDED, fetched_at, live_source: false };
 }
@@ -321,6 +334,7 @@ export function compactCfStrategy(cf) {
   return {
     schema: cf.schema,
     source_schema_version: cf.source_schema_version,
+    source_role: cf.source_role,
     live_source: cf.live_source,
     pick: cf.decision.pick,
     thesis: cf.thesis.headline,

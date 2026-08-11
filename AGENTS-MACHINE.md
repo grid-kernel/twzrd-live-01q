@@ -38,4 +38,4 @@ Base: **https://twzrd-live-01q-host.vercel.app**
 
 SPRAT source extract (optional history): https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json
 
-Schema: `twzrd.live_board/v1` · board version **1.1.0** · CF block `twzrd.cf_strategy/v1` · Prefer JSON over HTML
+Schema: `twzrd.live_board/v1` · board version **1.1.1** · CF block `twzrd.cf_strategy/v1` (SPRAT source extract **1.2.0**) · Prefer JSON over HTML

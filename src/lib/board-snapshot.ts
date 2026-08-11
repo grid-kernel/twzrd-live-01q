@@ -21,7 +21,7 @@ import {
   type CfStrategy,
 } from "./cf-strategy";
 
-export const BOARD_VERSION = "1.1.0";
+export const BOARD_VERSION = "1.1.1";
 export const BOARD_ID = "twzrd-live-0-1q";
 
 export type BoardMove = Move & {
@@ -153,8 +153,9 @@ export async function buildBoardSnapshot(opts?: {
     intel_upstream: "https://intel.twzrd.xyz/health",
     intel_llms: "https://intel.twzrd.xyz/llms.txt",
     intel_preflight: "https://intel.twzrd.xyz/v1/intel/preflight",
-    sprat_source:
-      "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json",
+    sprat_source: cf_strategy.source,
+    sprat_extract_note:
+      "SPRAT GitHub is source extract / history only — not a second start-here",
   };
 
   return {
@@ -219,6 +220,7 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
     "> Operator board for getting intel.twzrd.xyz from live infra to live demand in Q1.",
     "> Humans use the UI. Agents should start here and prefer JSON endpoints.",
     "> **Canonical multi-agent host.** SPRAT CF strategy is folded into `/api/board` → `cf_strategy`.",
+    "> SPRAT GitHub = source extract / history only (not a second start-here).",
     "",
     `schema: ${board.schema}`,
     `version: ${board.version}`,
@@ -232,6 +234,7 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
     "  board.next_actions / moves        — Path B 0→1Q execution",
     "  board.live                        — day0 funnel + intel health",
     "intel.twzrd.xyz                     — product (should I pay?)",
+    "SPRAT GitHub                        — extract / history only",
     "```",
     "",
     "| Agent needs… | Point at… |",
@@ -266,7 +269,7 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
     "",
     "## CF strategy (`cf_strategy` — SPRAT fold)",
     "",
-    `schema: ${cf.schema} · source ${cf.source_schema_version} · live_source=${cf.live_source}`,
+    `schema: ${cf.schema} · source ${cf.source_schema_version}${cf.source_role ? ` (${cf.source_role})` : ""} · live_source=${cf.live_source}`,
     "",
     `**Thesis:** ${cf.thesis.headline}`,
     "",
@@ -352,11 +355,14 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
   );
   lines.push("- https://twzrd.xyz — Product front door");
   lines.push(
-    "- https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json — SPRAT source extract (history)",
+    `- ${cf.source} — SPRAT source extract (history only, not a second host)`,
   );
   lines.push("");
   lines.push(
     "Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`.",
+  );
+  lines.push(
+    "SPRAT GitHub is extract only — start here at Live Board, not SPRAT.",
   );
   lines.push("");
 

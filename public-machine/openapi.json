@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "TWZRD Live 0→1Q",
+    "title": "TWZRD Live 0\u21921Q",
     "version": "1.1.0",
-    "description": "Machine-readable operator board. Includes cf_strategy (SPRAT fold). Pay decisions → intel preflight.",
+    "description": "Machine-readable operator board for intel.twzrd.xyz 0\u21921Q. Includes Path B playbook, live day0 funnel, and folded CF strategy (SPRAT). Prefer JSON over HTML. Pay decisions \u2192 intel preflight, not this API.",
     "contact": {
       "name": "TWZRD",
       "url": "https://twzrd.xyz"
@@ -11,47 +11,177 @@
   },
   "servers": [
     {
-      "url": "https://twzrd-live-board.vercel.app"
-    },
-    {
-      "url": "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine"
+      "url": "https://twzrd-live-01q-host.vercel.app"
     }
   ],
   "paths": {
     "/llms.txt": {
       "get": {
-        "summary": "Agent entry guide",
-        "operationId": "getLlmsTxt"
+        "summary": "Agent entry guide (markdown)",
+        "operationId": "getLlmsTxt",
+        "responses": {
+          "200": {
+            "description": "Markdown guide",
+            "content": {
+              "text/markdown": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/board": {
       "get": {
-        "summary": "Full board + cf_strategy",
-        "operationId": "getBoard"
+        "summary": "Full board snapshot: live funnel + playbook + cf_strategy",
+        "description": "Board includes `cf_strategy` (twzrd.cf_strategy/v1) folded from SPRAT. Do not use for pay decisions.",
+        "operationId": "getBoard",
+        "parameters": [
+          {
+            "name": "phase",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "truth",
+                "wedge",
+                "proof",
+                "distribution",
+                "convert"
+              ]
+            }
+          },
+          {
+            "name": "horizon",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "this_week",
+                "this_month",
+                "quarter"
+              ]
+            }
+          },
+          {
+            "name": "impact",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "critical",
+                "high",
+                "medium"
+              ]
+            }
+          },
+          {
+            "name": "done",
+            "in": "query",
+            "description": "Comma-separated completed move ids",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Board snapshot with cf_strategy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/board/status": {
       "get": {
-        "summary": "Status + cf_strategy summary",
-        "operationId": "getBoardStatus"
+        "summary": "Compact live status + next actions + cf_strategy summary",
+        "operationId": "getBoardStatus",
+        "responses": {
+          "200": {
+            "description": "Status snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/board/moves": {
       "get": {
-        "summary": "Moves only",
-        "operationId": "getBoardMoves"
-      }
-    },
-    "/api/openapi.json": {
-      "get": {
-        "summary": "OpenAPI",
-        "operationId": "getOpenapi"
+        "summary": "Playbook moves only",
+        "operationId": "getBoardMoves",
+        "parameters": [
+          {
+            "name": "phase",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "horizon",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "impact",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "done",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moves list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/intel-health": {
       "get": {
-        "summary": "Intel health proxy",
-        "operationId": "getIntelHealth"
+        "summary": "Proxy of intel.twzrd.xyz/health",
+        "operationId": "getIntelHealth",
+        "responses": {
+          "200": {
+            "description": "Upstream health JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
