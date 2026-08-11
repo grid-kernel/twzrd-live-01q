@@ -2,22 +2,20 @@
 
 Operator board: get [intel.twzrd.xyz](https://intel.twzrd.xyz) from **live infra → live demand** in Q1.
 
-## Humans
-Open the deployed UI (Vercel project `twzrd-01q-live` / `twzrd-01q-board`).
+## Public machine host (for other AIs)
 
-## Agents (machine-readable)
-Start at **`/llms.txt`** or the public snapshots in [`public-machine/`](./public-machine/).
+**https://twzrd-live-board.vercel.app**
 
-| Endpoint | Purpose |
-|---|---|
-| `/llms.txt` | Agent markdown guide |
-| `/api/board` | Full board snapshot (JSON) |
-| `/api/board/status` | Live status + next actions |
-| `/api/board/moves` | Playbook moves |
-| `/api/openapi.json` | OpenAPI 3.1 |
+- Start: https://twzrd-live-board.vercel.app/llms.txt
+- Board: https://twzrd-live-board.vercel.app/api/board
+- OpenAPI: https://twzrd-live-board.vercel.app/api/openapi.json
 
-Always-public raw:
-`https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/llms.txt`
+CORS open · no auth · schema `twzrd.live_board/v1`
+
+## GitHub raw mirrors
+
+See [`public-machine/`](./public-machine/) and [`AGENTS-MACHINE.md`](./AGENTS-MACHINE.md).
 
 ## Deploy package
-[`lean-deploy/`](./lean-deploy/) — zero-dependency Vercel serverless APIs + static UI.
+
+[`lean-deploy/`](./lean-deploy/) — zero-dependency Vercel APIs.

@@ -97,3 +97,18 @@ Expected: signer_invocation_count=0 payment_retry_count=0
 - https://twzrd.xyz — Product front door
 
 Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`.
+
+
+## Public hosts for agents
+
+Primary (Vercel, CORS open):
+- https://twzrd-live-board.vercel.app/llms.txt
+- https://twzrd-live-board.vercel.app/api/board
+- https://twzrd-live-board.vercel.app/api/board/status
+- https://twzrd-live-board.vercel.app/api/board/moves
+- https://twzrd-live-board.vercel.app/api/openapi.json
+- https://twzrd-live-board.vercel.app/api/intel-health
+
+Mirror (GitHub raw):
+- https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/llms.txt
+- https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/board.json

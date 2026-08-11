@@ -2,7 +2,7 @@
   "schema": "twzrd.live_board/v1",
   "id": "twzrd-live-0-1q",
   "version": "1.0.0",
-  "generated_at": "2026-08-11T21:35:12.415Z",
+  "generated_at": "2026-08-11T21:43:24.543Z",
   "product": {
     "name": "TWZRD Live 0→1Q",
     "owner": "TWZRD",
@@ -309,7 +309,7 @@
   ],
   "live": {
     "ok": true,
-    "fetched_at": "2026-08-11T21:35:12.415Z",
+    "fetched_at": "2026-08-11T21:43:24.543Z",
     "health": {
       "status": "ok",
       "package_version": "0.5.6",
@@ -318,16 +318,16 @@
       "settle_gate_enforcing": false,
       "settle_gate_shadow": true,
       "service_catalog": {
-        "service_count": 14798,
+        "service_count": 14791,
         "covered_paytos": 1195,
-        "live_402_service_count": 2976,
+        "live_402_service_count": 2988,
         "available": true
       }
     },
     "day0": {
-      "free_card_hits": 2705,
-      "free_card_hits_internal": 2674,
-      "free_card_hits_external": 31,
+      "free_card_hits": 2750,
+      "free_card_hits_internal": 2718,
+      "free_card_hits_external": 32,
       "free_card_hits_unattributed": 0,
       "free_card_attribution_note": "external is the only demand-bearing number here; internal is our own swarm/tooling and unattributed is context-free, never external",
       "portable_proof_upsell_shown": 0,
@@ -349,8 +349,8 @@
       "paid_trust_payer_external": 0,
       "paid_trust_payer_unknown": 0,
       "paid_trust_payer_note": "external = EXTERNAL_VERIFIED_WALLETS only (completed lineage audit); internal = INTERNAL_WALLETS / dogfood; unknown = unknown_pending_audit (default for anything new — never counted as external). Use paid_trust_payer_external for organic conversion, not raw paid_trust_total.",
-      "path_placeholder_hits": 332,
-      "template_alias_served": 332,
+      "path_placeholder_hits": 337,
+      "template_alias_served": 337,
       "path_invalid_pubkey_hits": 2,
       "path_placeholder_samples": [
         "/v1/intel/merchant::solana_address",
@@ -373,8 +373,8 @@
       "grade_cache_hits": 0,
       "grade_flagged": 0,
       "grade_receipt_minted": 0,
-      "door_requests": 2707,
-      "door_anon": 2707,
+      "door_requests": 2752,
+      "door_anon": 2752,
       "door_proven": 0,
       "door_receipt": 0,
       "door_rate_limited": 0,
@@ -383,9 +383,9 @@
         "note": "door-zero funnel: process-local mechanism usage; NOT external adoption (metric stays counted_external guard runs)",
         "stages": {
           "grade_hits": 0,
-          "free_card_hits": 2705,
-          "free_card_hits_internal": 2674,
-          "free_card_hits_external": 31,
+          "free_card_hits": 2750,
+          "free_card_hits_internal": 2718,
+          "free_card_hits_external": 32,
           "free_card_hits_unattributed": 0,
           "paid_trust_total": 0,
           "receipt_verifies": 12
@@ -398,8 +398,8 @@
           "basis": "free_card_hits_external"
         },
         "door": {
-          "requests": 2707,
-          "anon": 2707,
+          "requests": 2752,
+          "anon": 2752,
           "proven": 0,
           "receipt": 0,
           "rate_limited": 0,
@@ -416,7 +416,7 @@
       "merchant_attach_error": 0
     },
     "funnel": {
-      "external_cards": 31,
+      "external_cards": 32,
       "gate_evals": 0,
       "gate_blocks": 0,
       "paid_external": 0
