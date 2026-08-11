@@ -1,0 +1,10 @@
+node_modules/
+.vercel/output/
+dist/
+.tanstack/
+*.log
+screenshots/
+artifacts/
+.grok/
+routeTree.gen.ts
+.env*
