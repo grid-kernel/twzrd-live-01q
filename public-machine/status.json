@@ -1,0 +1,193 @@
+{
+  "schema": "twzrd.live_board_status/v1",
+  "id": "twzrd-live-0-1q",
+  "version": "1.0.0",
+  "generated_at": "2026-08-11T21:28:40.359Z",
+  "north_star": {
+    "title": "Live 0→1 for Q1",
+    "statement": "An external agent client installs the TWZRD buyer gate and honors block before the wallet signs — proven by gate_evals and refuse transcripts, not by free MCP hits.",
+    "primary": "External gate_evals (Path B)",
+    "secondary": "free_card_hits_external",
+    "tertiary": "paid_trust_payer_external"
+  },
+  "live": {
+    "ok": true,
+    "fetched_at": "2026-08-11T21:28:40.359Z",
+    "health": {
+      "status": "ok",
+      "package_version": "0.5.6",
+      "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+      "mode": "mainnet",
+      "settle_gate_enforcing": false,
+      "settle_gate_shadow": true,
+      "service_catalog": {
+        "service_count": 14798,
+        "covered_paytos": 1195,
+        "live_402_service_count": 2976,
+        "available": true
+      }
+    },
+    "day0": {
+      "free_card_hits": 2693,
+      "free_card_hits_internal": 2662,
+      "free_card_hits_external": 31,
+      "free_card_hits_unattributed": 0,
+      "free_card_attribution_note": "external is the only demand-bearing number here; internal is our own swarm/tooling and unattributed is context-free, never external",
+      "portable_proof_upsell_shown": 0,
+      "portable_proof_upsell_shown_internal": 0,
+      "portable_proof_upsell_shown_external": 0,
+      "portable_proof_upsell_shown_unattributed": 0,
+      "portable_proof_upsell_note": "merchant_card path only, interim in-memory counter (per-worker, non-durable, resets on restart) — the preflight path's impressions are durable, see preflight_requests.portable_proof_upsell_trigger instead",
+      "paid_merchant_mints": 0,
+      "receipt_verifies": 12,
+      "receipt_verify_valid": 0,
+      "receipt_verify_invalid": 12,
+      "dead_listing_demotions": 0,
+      "paid_trust_real_corpus": 0,
+      "paid_trust_self_or_payer": 0,
+      "paid_trust_not_in_corpus": 0,
+      "paid_trust_internal_interop": 0,
+      "paid_trust_unknown_basis": 0,
+      "paid_trust_payer_internal": 0,
+      "paid_trust_payer_external": 0,
+      "paid_trust_payer_unknown": 0,
+      "paid_trust_payer_note": "external = EXTERNAL_VERIFIED_WALLETS only (completed lineage audit); internal = INTERNAL_WALLETS / dogfood; unknown = unknown_pending_audit (default for anything new — never counted as external). Use paid_trust_payer_external for organic conversion, not raw paid_trust_total.",
+      "path_placeholder_hits": 330,
+      "template_alias_served": 330,
+      "path_invalid_pubkey_hits": 2,
+      "path_placeholder_samples": [
+        "/v1/intel/merchant::solana_address",
+        "/v1/intel/quick::pubkey",
+        "/v1/intel/quick:{pubkey}",
+        "/v1/intel/merchant:{pubkey}",
+        "/v1/intel/trust::pubkey",
+        "/v1/intel/trust:{pubkey}",
+        "/v1/intel/merchant_card:{wallet}",
+        "/v1/intel/quick::solana_address"
+      ],
+      "paid_trust_total": 0,
+      "gate_evals": 0,
+      "gate_shadow_blocks": 0,
+      "gate_blocks": 0,
+      "gate_allows": 0,
+      "gate_fail_open": 0,
+      "gate_wash_flagged": 0,
+      "grade_hits": 0,
+      "grade_cache_hits": 0,
+      "grade_flagged": 0,
+      "grade_receipt_minted": 0,
+      "door_requests": 2695,
+      "door_anon": 2695,
+      "door_proven": 0,
+      "door_receipt": 0,
+      "door_rate_limited": 0,
+      "door_fail_open": 0,
+      "door_zero": {
+        "note": "door-zero funnel: process-local mechanism usage; NOT external adoption (metric stays counted_external guard runs)",
+        "stages": {
+          "grade_hits": 0,
+          "free_card_hits": 2693,
+          "free_card_hits_internal": 2662,
+          "free_card_hits_external": 31,
+          "free_card_hits_unattributed": 0,
+          "paid_trust_total": 0,
+          "receipt_verifies": 12
+        },
+        "conversions": {
+          "grade_to_free_card": null,
+          "free_card_to_paid": 0,
+          "paid_to_receipt_verify": null,
+          "grade_to_receipt_verify": null,
+          "basis": "free_card_hits_external"
+        },
+        "door": {
+          "requests": 2695,
+          "anon": 2695,
+          "proven": 0,
+          "receipt": 0,
+          "rate_limited": 0,
+          "fail_open": 0
+        },
+        "grade_detail": {
+          "cache_hits": 0,
+          "flagged": 0,
+          "receipt_minted": 0
+        }
+      },
+      "merchant_attach_ok": 0,
+      "merchant_attach_skip": 0,
+      "merchant_attach_error": 0
+    },
+    "funnel": {
+      "external_cards": 31,
+      "gate_evals": 0,
+      "gate_blocks": 0,
+      "paid_external": 0
+    },
+    "funnel_status": {
+      "external_cards": "thin",
+      "gate_evals": "empty",
+      "gate_blocks": "empty",
+      "paid_external": "empty"
+    },
+    "diagnosis": "Advisory demand exists without enforcement. Free cards are happening; nobody has installed the buyer gate. Lead with refuse-before-sign."
+  },
+  "next_actions": [
+    {
+      "id": "truth-external-only",
+      "title": "Pin external-only Day0 on the wall",
+      "impact": "critical",
+      "horizon": "this_week",
+      "phase": "truth",
+      "metric": "Team can recite external free cards, gate_evals, paid_trust_external from memory"
+    },
+    {
+      "id": "truth-north-star",
+      "title": "Declare Path B north star for Q1",
+      "impact": "critical",
+      "horizon": "this_week",
+      "phase": "truth",
+      "metric": "gate_evals (external) is the only primary OKR"
+    },
+    {
+      "id": "wedge-path-b",
+      "title": "Lead every conversation with refuse-before-sign",
+      "impact": "critical",
+      "horizon": "this_week",
+      "phase": "wedge",
+      "metric": "100% of partner demos show Path B first"
+    },
+    {
+      "id": "proof-cold-machine",
+      "title": "Cold-machine Path B under 5 minutes",
+      "impact": "critical",
+      "horizon": "this_week",
+      "phase": "proof",
+      "metric": "3 independent people complete refuse proof without help"
+    },
+    {
+      "id": "wedge-message",
+      "title": "Freeze a one-screen message hierarchy",
+      "impact": "high",
+      "horizon": "this_week",
+      "phase": "wedge",
+      "metric": "One paragraph + one command on every surface (intel, X, Smithery blurb)"
+    }
+  ],
+  "dogfood": {
+    "title": "Cold-machine Path B refuse proof",
+    "command": "npm i twzrd-x402-gate@0.8.14 x402-solana@2.1.0 @x402/core @x402/fetch @x402/svm @solana/kit @scure/base\nnode node_modules/twzrd-x402-gate/bin/twzrd-gate-eval-refuse.js",
+    "expected": "signer_invocation_count=0 payment_retry_count=0",
+    "notes": "No wallet. No USDC. Primary Q1 proof that the buyer gate can refuse before sign."
+  },
+  "endpoints": {
+    "note": "Live CORS APIs run in this app's preview and Vercel lean-deploy. GitHub raw is a public snapshot mirror.",
+    "board_json": "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/board.json",
+    "status_json": "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/status.json",
+    "moves_json": "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/moves.json",
+    "llms_txt": "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/llms.txt",
+    "openapi": "https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/openapi.json",
+    "repo": "https://github.com/grid-kernel/twzrd-live-01q",
+    "lean_vercel_package": "https://github.com/grid-kernel/twzrd-live-01q/tree/main/lean-deploy"
+  }
+}
