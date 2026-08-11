@@ -6,7 +6,24 @@
 
 schema: twzrd.live_board/v1
 version: 1.1.0
-generated_at: 2026-08-11T21:55:54.572Z
+generated_at: 2026-08-11T21:57:42.565Z
+
+## Routing (locked)
+
+```text
+Live Board /llms.txt → /api/board  — start here (execution + CF strategy)
+  board.cf_strategy                 — CF→Solana posture (SPRAT fold)
+  board.next_actions / moves        — Path B 0→1Q execution
+  board.live                        — day0 funnel + intel health
+intel.twzrd.xyz                     — product (should I pay?)
+```
+
+| Agent needs… | Point at… |
+|---|---|
+| CF / Solana posture this week | `/api/board` → `cf_strategy` |
+| What next for external gate_evals | `/api/board` / `/api/board/status` |
+| Intel up / day0 | `/api/intel-health` or intel `/health` |
+| Should I pay this seller? | **intel preflight — never this board** |
 
 ## North star
 
@@ -24,7 +41,7 @@ Advisory demand exists without enforcement. Free cards are happening; nobody has
 
 | Stage | Value | Status |
 |---|---:|---|
-| External free cards | 16 | thin |
+| External free cards | 32 | thin |
 | Gate evals (Path B) | 0 | empty |
 | Gate blocks | 0 | empty |
 | Paid trust external | 0 | empty |

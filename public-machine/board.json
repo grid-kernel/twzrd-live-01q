@@ -2,7 +2,7 @@
   "schema": "twzrd.live_board/v1",
   "id": "twzrd-live-0-1q",
   "version": "1.1.0",
-  "generated_at": "2026-08-11T21:55:54.572Z",
+  "generated_at": "2026-08-11T21:57:42.565Z",
   "product": {
     "name": "TWZRD Live 0→1Q",
     "owner": "TWZRD",
@@ -309,7 +309,7 @@
   ],
   "live": {
     "ok": true,
-    "fetched_at": "2026-08-11T21:55:54.572Z",
+    "fetched_at": "2026-08-11T21:57:42.565Z",
     "health": {
       "status": "ok",
       "package_version": "0.5.6",
@@ -325,9 +325,9 @@
       }
     },
     "day0": {
-      "free_card_hits": 1547,
-      "free_card_hits_internal": 1531,
-      "free_card_hits_external": 16,
+      "free_card_hits": 2801,
+      "free_card_hits_internal": 2769,
+      "free_card_hits_external": 32,
       "free_card_hits_unattributed": 0,
       "free_card_attribution_note": "external is the only demand-bearing number here; internal is our own swarm/tooling and unattributed is context-free, never external",
       "portable_proof_upsell_shown": 0,
@@ -336,9 +336,9 @@
       "portable_proof_upsell_shown_unattributed": 0,
       "portable_proof_upsell_note": "merchant_card path only, interim in-memory counter (per-worker, non-durable, resets on restart) — the preflight path's impressions are durable, see preflight_requests.portable_proof_upsell_trigger instead",
       "paid_merchant_mints": 0,
-      "receipt_verifies": 6,
+      "receipt_verifies": 13,
       "receipt_verify_valid": 0,
-      "receipt_verify_invalid": 6,
+      "receipt_verify_invalid": 13,
       "dead_listing_demotions": 0,
       "paid_trust_real_corpus": 0,
       "paid_trust_self_or_payer": 0,
@@ -349,18 +349,18 @@
       "paid_trust_payer_external": 0,
       "paid_trust_payer_unknown": 0,
       "paid_trust_payer_note": "external = EXTERNAL_VERIFIED_WALLETS only (completed lineage audit); internal = INTERNAL_WALLETS / dogfood; unknown = unknown_pending_audit (default for anything new — never counted as external). Use paid_trust_payer_external for organic conversion, not raw paid_trust_total.",
-      "path_placeholder_hits": 203,
-      "template_alias_served": 203,
-      "path_invalid_pubkey_hits": 0,
+      "path_placeholder_hits": 349,
+      "template_alias_served": 349,
+      "path_invalid_pubkey_hits": 3,
       "path_placeholder_samples": [
-        "/v1/intel/trust::pubkey",
-        "/v1/intel/quick::solana_address",
         "/v1/intel/quick:{pubkey}",
+        "/v1/intel/merchant:{pubkey}",
+        "/v1/intel/trust::pubkey",
+        "/v1/intel/trust:{pubkey}",
         "/v1/intel/merchant_card:{wallet}",
-        "/v1/intel/quick::pubkey",
-        "/v1/intel/merchant::solana_address",
-        "/v1/intel/merchant::pubkey",
-        "/v1/intel/merchant:{pubkey}"
+        "/v1/intel/quick::solana_address",
+        "/v1/intel/quick:{solana_address}",
+        "/v1/intel/merchant::pubkey"
       ],
       "paid_trust_total": 0,
       "gate_evals": 0,
@@ -373,8 +373,8 @@
       "grade_cache_hits": 0,
       "grade_flagged": 0,
       "grade_receipt_minted": 0,
-      "door_requests": 1549,
-      "door_anon": 1549,
+      "door_requests": 2802,
+      "door_anon": 2802,
       "door_proven": 0,
       "door_receipt": 0,
       "door_rate_limited": 0,
@@ -383,12 +383,12 @@
         "note": "door-zero funnel: process-local mechanism usage; NOT external adoption (metric stays counted_external guard runs)",
         "stages": {
           "grade_hits": 0,
-          "free_card_hits": 1547,
-          "free_card_hits_internal": 1531,
-          "free_card_hits_external": 16,
+          "free_card_hits": 2801,
+          "free_card_hits_internal": 2769,
+          "free_card_hits_external": 32,
           "free_card_hits_unattributed": 0,
           "paid_trust_total": 0,
-          "receipt_verifies": 6
+          "receipt_verifies": 13
         },
         "conversions": {
           "grade_to_free_card": null,
@@ -398,8 +398,8 @@
           "basis": "free_card_hits_external"
         },
         "door": {
-          "requests": 1549,
-          "anon": 1549,
+          "requests": 2802,
+          "anon": 2802,
           "proven": 0,
           "receipt": 0,
           "rate_limited": 0,
@@ -416,7 +416,7 @@
       "merchant_attach_error": 0
     },
     "funnel": {
-      "external_cards": 16,
+      "external_cards": 32,
       "gate_evals": 0,
       "gate_blocks": 0,
       "paid_external": 0
@@ -667,7 +667,7 @@
       "example_readme": "https://github.com/twzrd-sol/wzrd-final/tree/main/examples/cloudflare-x402-seller",
       "live_worker": "https://x402-seller-hack-20260810.fp4b5ksccw.workers.dev/paid/hello"
     },
-    "fetched_at": "2026-08-11T21:55:54.606Z",
+    "fetched_at": "2026-08-11T21:57:42.600Z",
     "live_source": true
   },
   "next_actions": [
