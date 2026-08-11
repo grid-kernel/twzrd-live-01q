@@ -6,11 +6,11 @@ Includes folded **CF strategy** (`cf_strategy` from SPRAT) so other AIs have one
 
 ## Public machine host (for other AIs)
 
-**https://twzrd-live-board.vercel.app**
+**https://twzrd-live-01q-host.vercel.app**
 
-- Start: https://twzrd-live-board.vercel.app/llms.txt
-- Board: https://twzrd-live-board.vercel.app/api/board (includes `cf_strategy`)
-- OpenAPI: https://twzrd-live-board.vercel.app/api/openapi.json
+- Start: https://twzrd-live-01q-host.vercel.app/llms.txt
+- Board: https://twzrd-live-01q-host.vercel.app/api/board (includes `cf_strategy`)
+- OpenAPI: https://twzrd-live-01q-host.vercel.app/api/openapi.json
 
 CORS open · no auth · schema `twzrd.live_board/v1` · version `1.1.0`
 
@@ -22,4 +22,5 @@ See [`public-machine/`](./public-machine/) and [`AGENTS-MACHINE.md`](./AGENTS-MA
 
 ## Deploy package
 
-[`lean-deploy/`](./lean-deploy/) — zero-dependency Vercel APIs.
+[`lean-deploy/`](./lean-deploy/) — full serverless package.
+Proxy host currently serves GitHub `public-machine/*` + live intel + live SPRAT.

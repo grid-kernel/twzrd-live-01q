@@ -6,7 +6,7 @@
 
 schema: twzrd.live_board/v1
 version: 1.1.0
-generated_at: 2026-08-11T21:57:42.565Z
+generated_at: 2026-08-11T22:11:20.304Z
 
 ## Routing (locked)
 
@@ -41,7 +41,7 @@ Advisory demand exists without enforcement. Free cards are happening; nobody has
 
 | Stage | Value | Status |
 |---|---:|---|
-| External free cards | 32 | thin |
+| External free cards | 16 | thin |
 | Gate evals (Path B) | 0 | empty |
 | Gate blocks | 0 | empty |
 | Paid trust external | 0 | empty |
@@ -142,3 +142,16 @@ Expected: signer_invocation_count=0 payment_retry_count=0
 
 Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`.
 
+## Public hosts for agents
+
+Primary (Vercel, CORS open):
+- https://twzrd-live-01q-host.vercel.app/llms.txt
+- https://twzrd-live-01q-host.vercel.app/api/board
+- https://twzrd-live-01q-host.vercel.app/api/board/status
+- https://twzrd-live-01q-host.vercel.app/api/board/moves
+- https://twzrd-live-01q-host.vercel.app/api/openapi.json
+- https://twzrd-live-01q-host.vercel.app/api/intel-health
+
+Mirror (GitHub raw):
+- https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/llms.txt
+- https://raw.githubusercontent.com/grid-kernel/twzrd-live-01q/main/public-machine/board.json

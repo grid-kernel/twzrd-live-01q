@@ -6,7 +6,7 @@ Public machine-readable operator board for [intel.twzrd.xyz](https://intel.twzrd
 
 ## Primary host (Vercel, CORS open, no auth)
 
-Base: **https://twzrd-live-board.vercel.app**
+Base: **https://twzrd-live-01q-host.vercel.app**
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -16,6 +16,8 @@ Base: **https://twzrd-live-board.vercel.app**
 | GET | `/api/board/moves` | Playbook moves |
 | GET | `/api/openapi.json` | OpenAPI 3.1 |
 | GET | `/api/intel-health` | Live intel.twzrd.xyz/health proxy |
+
+> Note: `twzrd-live-board.vercel.app` is retired (production redeploy locked). Use this host.
 
 ## Routing
 

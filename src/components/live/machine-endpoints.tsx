@@ -1,11 +1,14 @@
 import { Bot, ExternalLink } from "lucide-react";
 
+const PUBLIC_BASE = "https://twzrd-live-board.vercel.app";
+
 const ENDPOINTS = [
   { path: "/llms.txt", label: "llms.txt", hint: "Agent start" },
   { path: "/api/board", label: "board JSON", hint: "Full snapshot" },
   { path: "/api/board/status", label: "status JSON", hint: "Live + next" },
   { path: "/api/board/moves", label: "moves JSON", hint: "Playbook" },
   { path: "/api/openapi.json", label: "OpenAPI", hint: "Schema" },
+  { path: "/api/intel-health", label: "intel health", hint: "Live metrics" },
 ];
 
 export function MachineEndpoints() {
@@ -23,7 +26,16 @@ export function MachineEndpoints() {
             For other AIs — skip the HTML
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Public CORS-open JSON. Agents should read{" "}
+            Public CORS-open host:{" "}
+            <a
+              href={PUBLIC_BASE}
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono text-xs text-fg underline decoration-border underline-offset-2 hover:decoration-fg"
+            >
+              twzrd-live-board.vercel.app
+            </a>
+            . Agents start at{" "}
             <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
               /llms.txt
             </code>{" "}
@@ -39,7 +51,7 @@ export function MachineEndpoints() {
         {ENDPOINTS.map((e) => (
           <li key={e.path}>
             <a
-              href={e.path}
+              href={`${PUBLIC_BASE}${e.path}`}
               target="_blank"
               rel="noreferrer"
               className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2.5 transition-colors hover:border-border-strong hover:bg-surface-3"
