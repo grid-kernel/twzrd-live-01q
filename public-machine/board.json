@@ -2,13 +2,13 @@
   "schema": "twzrd.live_board/v1",
   "id": "twzrd-live-0-1q",
   "version": "1.0.0",
-  "generated_at": "2026-08-11T21:28:40.359Z",
+  "generated_at": "2026-08-11T21:35:12.415Z",
   "product": {
     "name": "TWZRD Live 0→1Q",
     "owner": "TWZRD",
     "intel_base": "https://intel.twzrd.xyz",
-    "human_ui": "https://github.com/grid-kernel/twzrd-live-01q/",
-    "machine_start": "https://github.com/grid-kernel/twzrd-live-01q/llms.txt"
+    "human_ui": "http://127.0.0.1:8080/",
+    "machine_start": "http://127.0.0.1:8080/llms.txt"
   },
   "north_star": {
     "title": "Live 0→1 for Q1",
@@ -309,7 +309,7 @@
   ],
   "live": {
     "ok": true,
-    "fetched_at": "2026-08-11T21:28:40.359Z",
+    "fetched_at": "2026-08-11T21:35:12.415Z",
     "health": {
       "status": "ok",
       "package_version": "0.5.6",
@@ -325,8 +325,8 @@
       }
     },
     "day0": {
-      "free_card_hits": 2693,
-      "free_card_hits_internal": 2662,
+      "free_card_hits": 2705,
+      "free_card_hits_internal": 2674,
       "free_card_hits_external": 31,
       "free_card_hits_unattributed": 0,
       "free_card_attribution_note": "external is the only demand-bearing number here; internal is our own swarm/tooling and unattributed is context-free, never external",
@@ -349,8 +349,8 @@
       "paid_trust_payer_external": 0,
       "paid_trust_payer_unknown": 0,
       "paid_trust_payer_note": "external = EXTERNAL_VERIFIED_WALLETS only (completed lineage audit); internal = INTERNAL_WALLETS / dogfood; unknown = unknown_pending_audit (default for anything new — never counted as external). Use paid_trust_payer_external for organic conversion, not raw paid_trust_total.",
-      "path_placeholder_hits": 330,
-      "template_alias_served": 330,
+      "path_placeholder_hits": 332,
+      "template_alias_served": 332,
       "path_invalid_pubkey_hits": 2,
       "path_placeholder_samples": [
         "/v1/intel/merchant::solana_address",
@@ -373,8 +373,8 @@
       "grade_cache_hits": 0,
       "grade_flagged": 0,
       "grade_receipt_minted": 0,
-      "door_requests": 2695,
-      "door_anon": 2695,
+      "door_requests": 2707,
+      "door_anon": 2707,
       "door_proven": 0,
       "door_receipt": 0,
       "door_rate_limited": 0,
@@ -383,8 +383,8 @@
         "note": "door-zero funnel: process-local mechanism usage; NOT external adoption (metric stays counted_external guard runs)",
         "stages": {
           "grade_hits": 0,
-          "free_card_hits": 2693,
-          "free_card_hits_internal": 2662,
+          "free_card_hits": 2705,
+          "free_card_hits_internal": 2674,
           "free_card_hits_external": 31,
           "free_card_hits_unattributed": 0,
           "paid_trust_total": 0,
@@ -398,8 +398,8 @@
           "basis": "free_card_hits_external"
         },
         "door": {
-          "requests": 2695,
-          "anon": 2695,
+          "requests": 2707,
+          "anon": 2707,
           "proven": 0,
           "receipt": 0,
           "rate_limited": 0,
@@ -540,13 +540,13 @@
     "notes": "No wallet. No USDC. Primary Q1 proof that the buyer gate can refuse before sign."
   },
   "endpoints": {
-    "human_ui": "https://github.com/grid-kernel/twzrd-live-01q/",
-    "llms_txt": "https://github.com/grid-kernel/twzrd-live-01q/llms.txt",
-    "board_json": "https://github.com/grid-kernel/twzrd-live-01q/api/board",
-    "status_json": "https://github.com/grid-kernel/twzrd-live-01q/api/board/status",
-    "moves_json": "https://github.com/grid-kernel/twzrd-live-01q/api/board/moves",
-    "openapi": "https://github.com/grid-kernel/twzrd-live-01q/api/openapi.json",
-    "intel_health_proxy": "https://github.com/grid-kernel/twzrd-live-01q/api/intel-health",
+    "human_ui": "http://127.0.0.1:8080/",
+    "llms_txt": "http://127.0.0.1:8080/llms.txt",
+    "board_json": "http://127.0.0.1:8080/api/board",
+    "status_json": "http://127.0.0.1:8080/api/board/status",
+    "moves_json": "http://127.0.0.1:8080/api/board/moves",
+    "openapi": "http://127.0.0.1:8080/api/openapi.json",
+    "intel_health_proxy": "http://127.0.0.1:8080/api/intel-health",
     "intel_upstream": "https://intel.twzrd.xyz/health",
     "intel_llms": "https://intel.twzrd.xyz/llms.txt"
   }
