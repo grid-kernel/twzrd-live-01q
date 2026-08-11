@@ -4,7 +4,9 @@ const PUBLIC_BASE = "https://twzrd-live-01q-host.vercel.app";
 
 const ENDPOINTS = [
   { path: "/llms.txt", label: "llms.txt", hint: "Agent start" },
-  { path: "/api/board", label: "board JSON", hint: "Full snapshot + cf_strategy" },
+  { path: "/path-b", label: "Path B runbook", hint: "Screen-share UI" },
+  { path: "/api/path-b", label: "path-b JSON", hint: "External install + evidence" },
+  { path: "/api/board", label: "board JSON", hint: "Full snapshot + runbook" },
   { path: "/api/board/status", label: "status JSON", hint: "Live + CF summary" },
   { path: "/api/board/moves", label: "moves JSON", hint: "Playbook" },
   { path: "/api/openapi.json", label: "OpenAPI", hint: "Schema" },
@@ -44,6 +46,10 @@ export function MachineEndpoints() {
               /api/board
             </code>{" "}
             (includes{" "}
+            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
+              path_b_runbook
+            </code>{" "}
+            +{" "}
             <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
               cf_strategy
             </code>

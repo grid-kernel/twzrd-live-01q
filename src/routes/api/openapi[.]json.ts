@@ -19,9 +19,9 @@ export const Route = createFileRoute("/api/openapi.json")({
           openapi: "3.1.0",
           info: {
             title: "TWZRD Live 0→1Q",
-            version: "1.1.0",
+            version: "1.2.0",
             description:
-              "Machine-readable operator board for intel.twzrd.xyz 0→1Q. Includes Path B playbook, live day0 funnel, and folded CF strategy (SPRAT). Prefer JSON over HTML. Pay decisions → intel preflight, not this API.",
+              "Machine-readable operator board for intel.twzrd.xyz 0→1Q. Includes Path B external runbook (refuse-before-sign), live day0 funnel, and folded CF strategy (SPRAT). Prefer JSON over HTML. Pay decisions → intel preflight, not this API.",
             contact: { name: "TWZRD", url: "https://twzrd.xyz" },
           },
           servers: [{ url: origin }],
@@ -40,12 +40,46 @@ export const Route = createFileRoute("/api/openapi.json")({
                 },
               },
             },
+            "/path-b": {
+              get: {
+                summary: "Human Path B external integration runbook (UI)",
+                operationId: "getPathBUi",
+                responses: { "200": { description: "HTML screen-share runbook" } },
+              },
+            },
+            "/api/path-b": {
+              get: {
+                summary: "Path B external integration runbook (JSON)",
+                description:
+                  "Install steps, BLOCK/ALLOW evidence checklist, Vicky→Nick→Lucas sequence, artifact template. format=md for markdown.",
+                operationId: "getPathBRunbook",
+                parameters: [
+                  {
+                    name: "format",
+                    in: "query",
+                    schema: {
+                      type: "string",
+                      enum: ["json", "md", "markdown", "txt"],
+                    },
+                  },
+                ],
+                responses: {
+                  "200": {
+                    description: "path_b_runbook/v1",
+                    content: {
+                      "application/json": { schema: { type: "object" } },
+                      "text/markdown": { schema: { type: "string" } },
+                    },
+                  },
+                },
+              },
+            },
             "/api/board": {
               get: {
                 summary:
-                  "Full board snapshot: live funnel + playbook + cf_strategy",
+                  "Full board snapshot: live funnel + playbook + cf_strategy + path_b_runbook",
                 description:
-                  "Board includes `cf_strategy` (twzrd.cf_strategy/v1) folded from SPRAT. Do not use for pay decisions.",
+                  "Board includes `path_b_runbook` and `cf_strategy`. Do not use for pay decisions.",
                 operationId: "getBoard",
                 parameters: [
                   {
@@ -81,17 +115,15 @@ export const Route = createFileRoute("/api/openapi.json")({
                   {
                     name: "done",
                     in: "query",
-                    description: "Comma-separated completed move ids",
                     schema: { type: "string" },
+                    description: "Comma-separated completed move ids",
                   },
                 ],
                 responses: {
                   "200": {
-                    description: "Board snapshot with cf_strategy",
+                    description: "twzrd.live_board/v1",
                     content: {
-                      "application/json": {
-                        schema: { type: "object" },
-                      },
+                      "application/json": { schema: { type: "object" } },
                     },
                   },
                 },
@@ -99,11 +131,11 @@ export const Route = createFileRoute("/api/openapi.json")({
             },
             "/api/board/status": {
               get: {
-                summary: "Compact live status + next actions + cf_strategy summary",
+                summary: "Compact live status + cf_strategy summary",
                 operationId: "getBoardStatus",
                 responses: {
                   "200": {
-                    description: "Status snapshot",
+                    description: "status",
                     content: {
                       "application/json": { schema: { type: "object" } },
                     },
@@ -113,17 +145,11 @@ export const Route = createFileRoute("/api/openapi.json")({
             },
             "/api/board/moves": {
               get: {
-                summary: "Playbook moves only",
+                summary: "Playbook moves",
                 operationId: "getBoardMoves",
-                parameters: [
-                  { name: "phase", in: "query", schema: { type: "string" } },
-                  { name: "horizon", in: "query", schema: { type: "string" } },
-                  { name: "impact", in: "query", schema: { type: "string" } },
-                  { name: "done", in: "query", schema: { type: "string" } },
-                ],
                 responses: {
                   "200": {
-                    description: "Moves list",
+                    description: "moves",
                     content: {
                       "application/json": { schema: { type: "object" } },
                     },
@@ -133,11 +159,25 @@ export const Route = createFileRoute("/api/openapi.json")({
             },
             "/api/intel-health": {
               get: {
-                summary: "Proxy of intel.twzrd.xyz/health",
+                summary: "Proxied intel.twzrd.xyz/health",
                 operationId: "getIntelHealth",
                 responses: {
                   "200": {
-                    description: "Upstream health JSON",
+                    description: "intel health",
+                    content: {
+                      "application/json": { schema: { type: "object" } },
+                    },
+                  },
+                },
+              },
+            },
+            "/api/openapi.json": {
+              get: {
+                summary: "This OpenAPI document",
+                operationId: "getOpenApi",
+                responses: {
+                  "200": {
+                    description: "OpenAPI 3.1",
                     content: {
                       "application/json": { schema: { type: "object" } },
                     },

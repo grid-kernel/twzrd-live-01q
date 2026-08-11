@@ -20,8 +20,9 @@ import {
   loadCfStrategy,
   type CfStrategy,
 } from "./cf-strategy";
+import { buildPathBRunbook, type PathBRunbook } from "./path-b-runbook";
 
-export const BOARD_VERSION = "1.1.1";
+export const BOARD_VERSION = "1.2.0";
 export const BOARD_ID = "twzrd-live-0-1q";
 
 export type BoardMove = Move & {
@@ -68,6 +69,8 @@ export type BoardSnapshot = {
   };
   /** CF→Solana strategy (SPRAT fold). Not pay decisions. */
   cf_strategy: CfStrategy;
+  /** Path B external integration runbook — refuse-before-sign. */
+  path_b_runbook: PathBRunbook;
   next_actions: BoardMove[];
   dogfood: {
     title: string;
@@ -135,6 +138,10 @@ export async function buildBoardSnapshot(opts?: {
     fetchIntelHealth(),
     loadCfStrategy(),
   ]);
+  const path_b_runbook = buildPathBRunbook({
+    origin,
+    generated_at: fetched_at,
+  });
   const day0 = intel.health?.day0;
   const funnel = deriveFunnel(day0);
   const moves = MOVES.map((m) => toBoardMove(m, doneIds.has(m.id)));
@@ -142,6 +149,8 @@ export async function buildBoardSnapshot(opts?: {
 
   const endpoints: Record<string, string> = {
     human_ui: origin ? `${origin}/` : "/",
+    path_b_runbook: origin ? `${origin}/path-b` : "/path-b",
+    path_b_json: origin ? `${origin}/api/path-b` : "/api/path-b",
     llms_txt: origin ? `${origin}/llms.txt` : "/llms.txt",
     board_json: origin ? `${origin}/api/board` : "/api/board",
     status_json: origin ? `${origin}/api/board/status` : "/api/board/status",
@@ -200,13 +209,14 @@ export async function buildBoardSnapshot(opts?: {
       diagnosis: liveDiagnosis(funnel, day0),
     },
     cf_strategy,
+    path_b_runbook,
     next_actions,
     dogfood: {
       title: "Cold-machine Path B refuse proof",
       command: DOGFOOD_CMD,
       expected: "signer_invocation_count=0 payment_retry_count=0",
       notes:
-        "No wallet. No USDC. Primary Q1 proof that the buyer gate can refuse before sign.",
+        "No wallet. No USDC. Primary Q1 proof that the buyer gate can refuse before sign. Full external runbook: /path-b",
     },
     endpoints,
   };
@@ -214,12 +224,14 @@ export async function buildBoardSnapshot(opts?: {
 
 export function boardToLlmsTxt(board: BoardSnapshot): string {
   const cf = board.cf_strategy;
+  const pb = board.path_b_runbook;
   const lines: string[] = [
     "# TWZRD Live 0→1Q — Machine guide",
     "",
     "> Operator board for getting intel.twzrd.xyz from live infra to live demand in Q1.",
     "> Humans use the UI. Agents should start here and prefer JSON endpoints.",
     "> **Canonical multi-agent host.** SPRAT CF strategy is folded into `/api/board` → `cf_strategy`.",
+    "> **Path B external runbook** is folded into `/api/board` → `path_b_runbook` and `/api/path-b`.",
     "> SPRAT GitHub = source extract / history only (not a second start-here).",
     "",
     `schema: ${board.schema}`,
@@ -229,16 +241,19 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
     "## Routing (locked)",
     "",
     "```text",
-    "Live Board /llms.txt → /api/board  — start here (execution + CF strategy)",
+    "Live Board /llms.txt → /api/board  — start here (execution + CF strategy + Path B)",
+    "  board.path_b_runbook              — external refuse-before-sign runbook",
     "  board.cf_strategy                 — CF→Solana posture (SPRAT fold)",
     "  board.next_actions / moves        — Path B 0→1Q execution",
     "  board.live                        — day0 funnel + intel health",
+    "Human screen-share                  — /path-b",
     "intel.twzrd.xyz                     — product (should I pay?)",
     "SPRAT GitHub                        — extract / history only",
     "```",
     "",
     "| Agent needs… | Point at… |",
     "|---|---|",
+    "| External Path B install + evidence | `/api/path-b` or `board.path_b_runbook` |",
     "| CF / Solana posture this week | `/api/board` → `cf_strategy` |",
     "| What next for external gate_evals | `/api/board` / `/api/board/status` |",
     "| Intel up / day0 | `/api/intel-health` or intel `/health` |",
@@ -266,6 +281,27 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
     `| Gate evals (Path B) | ${board.live.funnel.gate_evals} | ${board.live.funnel_status.gate_evals} |`,
     `| Gate blocks | ${board.live.funnel.gate_blocks} | ${board.live.funnel_status.gate_blocks} |`,
     `| Paid trust external | ${board.live.funnel.paid_external} | ${board.live.funnel_status.paid_external} |`,
+    "",
+    "## Path B runbook (`path_b_runbook`)",
+    "",
+    `schema: ${pb.schema} · v${pb.version}`,
+    "",
+    `**Claim:** ${pb.claim}`,
+    "",
+    `**North star:** ${pb.north_star}`,
+    "",
+    "Partner sequence (locked): **Vicky → Nick → Lucas**",
+    "",
+    "Cold install:",
+    "```bash",
+    pb.install.cold_machine_cmd,
+    "```",
+    `Expected: \`${pb.install.expected_refuse}\``,
+    "",
+    "Order of ops:",
+    ...pb.order_of_ops.map((o) => `- ${o}`),
+    "",
+    "Human UI: `/path-b` · Machine: `/api/path-b` (also `?format=md`)",
     "",
     "## CF strategy (`cf_strategy` — SPRAT fold)",
     "",
@@ -308,7 +344,10 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
     `| Path | Purpose |`,
     `|---|---|`,
     `| GET /llms.txt | This guide |`,
-    `| GET /api/board | Full board JSON (live + playbook + cf_strategy) |`,
+    `| GET /path-b | Human Path B runbook (screen-share) |`,
+    `| GET /api/path-b | Path B runbook JSON |`,
+    `| GET /api/path-b?format=md | Path B runbook markdown |`,
+    `| GET /api/board | Full board JSON (live + playbook + cf_strategy + path_b_runbook) |`,
     `| GET /api/board/status | Compact live status + cf_strategy summary |`,
     `| GET /api/board/moves | Playbook moves only |`,
     `| GET /api/board/moves?phase=truth&horizon=this_week&impact=critical | Filtered moves |`,
@@ -359,7 +398,7 @@ export function boardToLlmsTxt(board: BoardSnapshot): string {
   );
   lines.push("");
   lines.push(
-    "Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`.",
+    "Agents: do not scrape the HTML UI. Use `/api/board`, `/api/path-b`, or `/api/board/status`.",
   );
   lines.push(
     "SPRAT GitHub is extract only — start here at Live Board, not SPRAT.",

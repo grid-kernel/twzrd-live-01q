@@ -10,6 +10,7 @@ import { MachineEndpoints } from "@/components/live/machine-endpoints";
 import { MoveCard } from "@/components/live/move-card";
 import { NextActions } from "@/components/live/next-actions";
 import { NorthStar } from "@/components/live/north-star";
+import { PathBRunbookPanel } from "@/components/live/path-b-runbook-panel";
 import { PhaseRail } from "@/components/live/phase-rail";
 import { PulseHeader } from "@/components/live/pulse-header";
 import { Button } from "@/components/ui/button";
@@ -91,6 +92,12 @@ function Home() {
           </span>
         </p>
         <div className="flex shrink-0 items-center gap-2">
+          <Link
+            to="/path-b"
+            className="rounded-md border border-brand/30 bg-brand/10 px-2.5 py-1 text-[11px] font-medium text-fg transition-colors hover:bg-brand/15"
+          >
+            Path B runbook
+          </Link>
           {isPending ? (
             <div className="h-8 w-8 animate-pulse rounded-full bg-surface-3" />
           ) : user ? (
@@ -113,6 +120,9 @@ function Home() {
       <main className="mx-auto max-w-6xl space-y-5 overflow-x-hidden px-4 py-5 sm:space-y-6 sm:px-6 sm:py-8">
         <NorthStar />
         <FunnelPanel snapshot={snapshot} />
+
+        <PathBRunbookPanel compact />
+
         <CfStrategyPanel />
         <MachineEndpoints />
 
@@ -140,13 +150,17 @@ function Home() {
                 <p>
                   Q1 is not more surface area. It is Path B seats: buyer clients
                   that refuse before sign, proven by external metrics and refuse
-                  transcripts.
+                  transcripts. Run{" "}
+                  <Link to="/path-b" className="text-fg underline-offset-2 hover:underline">
+                    the external integration runbook
+                  </Link>{" "}
+                  with Vicky → Nick → Lucas before any founder post.
                 </p>
                 <ul className="space-y-1.5 border-t border-border pt-3 text-xs text-subtle">
                   <li>· Check off moves as you ship them</li>
                   <li>· Notes stay in this browser</li>
                   <li>· Pulse refreshes from /health every 60s</li>
-                  <li>· Agents: /llms.txt + /api/board (incl. cf_strategy)</li>
+                  <li>· Agents: /llms.txt + /api/board (+ path_b_runbook)</li>
                 </ul>
               </div>
             </section>
@@ -225,6 +239,10 @@ function Home() {
           >
             twzrd.xyz
           </a>
+          {" · "}
+          <Link to="/path-b" className="text-muted hover:text-fg">
+            path-b
+          </Link>
           {" · "}
           <a href="/llms.txt" className="text-muted hover:text-fg">
             llms.txt

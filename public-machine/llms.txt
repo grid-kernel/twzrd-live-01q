@@ -3,25 +3,29 @@
 > Operator board for getting intel.twzrd.xyz from live infra to live demand in Q1.
 > Humans use the UI. Agents should start here and prefer JSON endpoints.
 > **Canonical multi-agent host.** SPRAT CF strategy is folded into `/api/board` → `cf_strategy`.
+> **Path B external runbook** is folded into `/api/board` → `path_b_runbook` and `/api/path-b`.
 > SPRAT GitHub = source extract / history only (not a second start-here).
 
 schema: twzrd.live_board/v1
-version: 1.1.1
-generated_at: 2026-08-11T22:25:27.407Z
+version: 1.2.0
+generated_at: 2026-08-11T23:00:47.770Z
 
 ## Routing (locked)
 
 ```text
-Live Board /llms.txt → /api/board  — start here (execution + CF strategy)
+Live Board /llms.txt → /api/board  — start here (execution + CF strategy + Path B)
+  board.path_b_runbook              — external refuse-before-sign runbook
   board.cf_strategy                 — CF→Solana posture (SPRAT fold)
   board.next_actions / moves        — Path B 0→1Q execution
   board.live                        — day0 funnel + intel health
+Human screen-share                  — /path-b
 intel.twzrd.xyz                     — product (should I pay?)
 SPRAT GitHub                        — extract / history only
 ```
 
 | Agent needs… | Point at… |
 |---|---|
+| External Path B install + evidence | `/api/path-b` or `board.path_b_runbook` |
 | CF / Solana posture this week | `/api/board` → `cf_strategy` |
 | What next for external gate_evals | `/api/board` / `/api/board/status` |
 | Intel up / day0 | `/api/intel-health` or intel `/health` |
@@ -43,10 +47,36 @@ Advisory demand exists without enforcement. Free cards are happening; nobody has
 
 | Stage | Value | Status |
 |---|---:|---|
-| External free cards | 33 | thin |
+| External free cards | 35 | thin |
 | Gate evals (Path B) | 0 | empty |
 | Gate blocks | 0 | empty |
 | Paid trust external | 0 | empty |
+
+## Path B runbook (`path_b_runbook`)
+
+schema: twzrd.path_b_runbook/v1 · v1.0.0
+
+**Claim:** Externally controlled refuse-before-sign: a buyer pipeline that is not ours evaluates and can BLOCK payment before any Solana signer runs.
+
+**North star:** Success = external gate_evals with signer_invocation_count=0 on refuse (and attributable lineage on the Live Board).
+
+Partner sequence (locked): **Vicky → Nick → Lucas**
+
+Cold install:
+```bash
+npm i twzrd-x402-gate@0.8.14 x402-solana@2.1.0 @x402/core @x402/fetch @x402/svm @solana/kit @scure/base
+node node_modules/twzrd-x402-gate/bin/twzrd-gate-eval-refuse.js
+```
+Expected: `signer_invocation_count=0 payment_retry_count=0`
+
+Order of ops:
+- 1. Produce this runbook (screen-share ready)
+- 2. Define BLOCK/ALLOW evidence-capture checklist
+- 3. Run with Vicky, then Nick, then Lucas
+- 4. Capture one attributable external artifact
+- 5. Launch founder post with external proof — not enrollment theater
+
+Human UI: `/path-b` · Machine: `/api/path-b` (also `?format=md`)
 
 ## CF strategy (`cf_strategy` — SPRAT fold)
 
@@ -86,7 +116,10 @@ Source extract (optional mirror): https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-br
 | Path | Purpose |
 |---|---|
 | GET /llms.txt | This guide |
-| GET /api/board | Full board JSON (live + playbook + cf_strategy) |
+| GET /path-b | Human Path B runbook (screen-share) |
+| GET /api/path-b | Path B runbook JSON |
+| GET /api/path-b?format=md | Path B runbook markdown |
+| GET /api/board | Full board JSON (live + playbook + cf_strategy + path_b_runbook) |
 | GET /api/board/status | Compact live status + cf_strategy summary |
 | GET /api/board/moves | Playbook moves only |
 | GET /api/board/moves?phase=truth&horizon=this_week&impact=critical | Filtered moves |
@@ -151,5 +184,5 @@ Expected: signer_invocation_count=0 payment_retry_count=0
 - https://twzrd.xyz — Product front door
 - https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-brief@main/sprat.json — SPRAT source extract (history only, not a second host)
 
-Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`.
+Agents: do not scrape the HTML UI. Use `/api/board`, `/api/path-b`, or `/api/board/status`.
 SPRAT GitHub is extract only — start here at Live Board, not SPRAT.
