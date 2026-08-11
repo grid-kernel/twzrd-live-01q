@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SignedIn, SignedOut, UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { CfStrategyPanel } from "@/components/live/cf-strategy-panel";
 import { DogfoodBlock } from "@/components/live/dogfood-block";
 import { FunnelPanel } from "@/components/live/funnel-panel";
 import { HorizonFilter } from "@/components/live/horizon-filter";
@@ -112,6 +113,7 @@ function Home() {
       <main className="mx-auto max-w-6xl space-y-5 overflow-x-hidden px-4 py-5 sm:space-y-6 sm:px-6 sm:py-8">
         <NorthStar />
         <FunnelPanel snapshot={snapshot} />
+        <CfStrategyPanel />
         <MachineEndpoints />
 
         <div className="grid min-w-0 gap-5 lg:grid-cols-5 lg:gap-6">
@@ -144,7 +146,7 @@ function Home() {
                   <li>· Check off moves as you ship them</li>
                   <li>· Notes stay in this browser</li>
                   <li>· Pulse refreshes from /health every 60s</li>
-                  <li>· Agents: /llms.txt + /api/board</li>
+                  <li>· Agents: /llms.txt + /api/board (incl. cf_strategy)</li>
                 </ul>
               </div>
             </section>
@@ -224,17 +226,11 @@ function Home() {
             twzrd.xyz
           </a>
           {" · "}
-          <a
-            href="/llms.txt"
-            className="text-muted hover:text-fg"
-          >
+          <a href="/llms.txt" className="text-muted hover:text-fg">
             llms.txt
           </a>
           {" · "}
-          <a
-            href="/api/board"
-            className="text-muted hover:text-fg"
-          >
+          <a href="/api/board" className="text-muted hover:text-fg">
             api/board
           </a>
         </footer>

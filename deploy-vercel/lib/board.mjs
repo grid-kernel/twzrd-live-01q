@@ -1,3 +1,4 @@
+import { loadCfStrategy, compactCfStrategy } from "./cf-strategy.mjs";
 // src/lib/playbook.ts
 var PHASES = [
   {
@@ -309,7 +310,7 @@ function liveDiagnosis(funnel, day0) {
 }
 
 // src/lib/board-snapshot.ts
-var BOARD_VERSION = "1.0.0";
+var BOARD_VERSION = "1.1.0";
 var BOARD_ID = "twzrd-live-0-1q";
 var DOGFOOD_CMD = `npm i twzrd-x402-gate@0.8.14 x402-solana@2.1.0 @x402/core @x402/fetch @x402/svm @solana/kit @scure/base
 node node_modules/twzrd-x402-gate/bin/twzrd-gate-eval-refuse.js`;
@@ -350,7 +351,10 @@ async function buildBoardSnapshot(opts) {
   const doneIds = new Set(opts?.doneIds ?? []);
   const origin = (opts?.origin ?? "").replace(/\/$/, "");
   const fetched_at = (/* @__PURE__ */ new Date()).toISOString();
-  const intel = await fetchIntelHealth();
+  const [intel, cf_strategy] = await Promise.all([
+    fetchIntelHealth(),
+    loadCfStrategy()
+  ]);
   const day0 = intel.health?.day0;
   const funnel = deriveFunnel(day0);
   const moves = MOVES.map((m) => toBoardMove(m, doneIds.has(m.id)));
@@ -364,7 +368,9 @@ async function buildBoardSnapshot(opts) {
     openapi: origin ? `${origin}/api/openapi.json` : "/api/openapi.json",
     intel_health_proxy: origin ? `${origin}/api/intel-health` : "/api/intel-health",
     intel_upstream: "https://intel.twzrd.xyz/health",
-    intel_llms: "https://intel.twzrd.xyz/llms.txt"
+    intel_llms: "https://intel.twzrd.xyz/llms.txt",
+    intel_preflight: "https://intel.twzrd.xyz/v1/intel/preflight",
+    sprat_source: "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json"
   };
   return {
     schema: "twzrd.live_board/v1",
@@ -405,6 +411,7 @@ async function buildBoardSnapshot(opts) {
       },
       diagnosis: liveDiagnosis(funnel, day0)
     },
+    cf_strategy,
     next_actions,
     dogfood: {
       title: "Cold-machine Path B refuse proof",
@@ -421,6 +428,7 @@ function boardToLlmsTxt(board) {
     "",
     "> Operator board for getting intel.twzrd.xyz from live infra to live demand in Q1.",
     "> Humans use the UI. Agents should start here and prefer JSON endpoints.",
+    "> **Canonical multi-agent host.** SPRAT CF strategy is folded into `/api/board` → `cf_strategy`.",
     "",
     `schema: ${board.schema}`,
     `version: ${board.version}`,
@@ -447,13 +455,37 @@ function boardToLlmsTxt(board) {
     `| Gate blocks | ${board.live.funnel.gate_blocks} | ${board.live.funnel_status.gate_blocks} |`,
     `| Paid trust external | ${board.live.funnel.paid_external} | ${board.live.funnel_status.paid_external} |`,
     "",
+    "## CF strategy (`cf_strategy` — SPRAT fold)",
+    "",
+    `schema: ${board.cf_strategy.schema} · source ${board.cf_strategy.source_schema_version} · live_source=${board.cf_strategy.live_source}`,
+    "",
+    `**Thesis:** ${board.cf_strategy.thesis.headline}`,
+    "",
+    board.cf_strategy.thesis.subcopy,
+    "",
+    `**Decision (${board.cf_strategy.decision.pick}):** ${board.cf_strategy.decision.summary}`,
+    "",
+    `- ship_now: ${board.cf_strategy.posture.ship_now.join(", ")}`,
+    `- hold: ${board.cf_strategy.posture.hold.join(", ")}`,
+    `- ready_not_shipped: ${board.cf_strategy.posture.ready_not_shipped.join(", ")}`,
+    `- guardrail: ${board.cf_strategy.posture.guardrail}`,
+    "",
+    "### Signals",
+    "",
+    `- **A** \`${board.cf_strategy.signals.A.id}\` (${board.cf_strategy.signals.A.status}): ${board.cf_strategy.signals.A.fires_when}`,
+    `- **B** \`${board.cf_strategy.signals.B.id}\` (${board.cf_strategy.signals.B.status}): ${board.cf_strategy.signals.B.fires_when}`,
+    "",
+    `**Not this board:** ${board.cf_strategy.not_this_board}`,
+    "",
+    `Source extract: ${board.cf_strategy.source}`,
+    "",
     "## Machine endpoints (prefer these)",
     "",
     `| Path | Purpose |`,
     `|---|---|`,
     `| GET /llms.txt | This guide |`,
-    `| GET /api/board | Full board JSON (live health + playbook) |`,
-    `| GET /api/board/status | Compact live status + diagnosis |`,
+    `| GET /api/board | Full board JSON (live + playbook + cf_strategy) |`,
+    `| GET /api/board/status | Compact live status + cf_strategy summary |`,
     `| GET /api/board/moves | Playbook moves only |`,
     `| GET /api/board/moves?phase=truth&horizon=this_week&impact=critical | Filtered moves |`,
     `| GET /api/openapi.json | OpenAPI 3.1 for this service |`,
@@ -491,7 +523,9 @@ function boardToLlmsTxt(board) {
   lines.push("- https://intel.twzrd.xyz/llms.txt \u2014 Agent Intel MCP / HTTP");
   lines.push("- https://intel.twzrd.xyz/mcp \u2014 Hosted MCP");
   lines.push("- https://intel.twzrd.xyz/health \u2014 Day0 counters");
+  lines.push("- https://intel.twzrd.xyz/v1/intel/preflight \u2014 Pay decisions (product)");
   lines.push("- https://twzrd.xyz \u2014 Product front door");
+  lines.push("- https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json \u2014 SPRAT source extract");
   lines.push("");
   lines.push(
     "Agents: do not scrape the HTML UI. Use `/api/board` or `/api/board/status`."
@@ -548,6 +582,7 @@ export {
   BOARD_VERSION,
   boardToLlmsTxt,
   buildBoardSnapshot,
+  compactCfStrategy,
   filterMoves,
   jsonResponse,
   parseDoneParam,

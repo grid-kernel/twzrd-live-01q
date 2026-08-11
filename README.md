@@ -2,15 +2,19 @@
 
 Operator board: get [intel.twzrd.xyz](https://intel.twzrd.xyz) from **live infra → live demand** in Q1.
 
+Includes folded **CF strategy** (`cf_strategy` from SPRAT) so other AIs have one public host.
+
 ## Public machine host (for other AIs)
 
 **https://twzrd-live-board.vercel.app**
 
 - Start: https://twzrd-live-board.vercel.app/llms.txt
-- Board: https://twzrd-live-board.vercel.app/api/board
+- Board: https://twzrd-live-board.vercel.app/api/board (includes `cf_strategy`)
 - OpenAPI: https://twzrd-live-board.vercel.app/api/openapi.json
 
-CORS open · no auth · schema `twzrd.live_board/v1`
+CORS open · no auth · schema `twzrd.live_board/v1` · version `1.1.0`
+
+Pay decisions → https://intel.twzrd.xyz/v1/intel/preflight (not this board).
 
 ## GitHub raw mirrors
 

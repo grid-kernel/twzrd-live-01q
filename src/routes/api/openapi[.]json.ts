@@ -19,9 +19,9 @@ export const Route = createFileRoute("/api/openapi.json")({
           openapi: "3.1.0",
           info: {
             title: "TWZRD Live 0→1Q",
-            version: "1.0.0",
+            version: "1.1.0",
             description:
-              "Machine-readable operator board for getting intel.twzrd.xyz from live infra to live demand. Prefer JSON over HTML.",
+              "Machine-readable operator board for intel.twzrd.xyz 0→1Q. Includes Path B playbook, live day0 funnel, and folded CF strategy (SPRAT). Prefer JSON over HTML. Pay decisions → intel preflight, not this API.",
             contact: { name: "TWZRD", url: "https://twzrd.xyz" },
           },
           servers: [{ url: origin }],
@@ -33,14 +33,19 @@ export const Route = createFileRoute("/api/openapi.json")({
                 responses: {
                   "200": {
                     description: "Markdown guide",
-                    content: { "text/markdown": { schema: { type: "string" } } },
+                    content: {
+                      "text/markdown": { schema: { type: "string" } },
+                    },
                   },
                 },
               },
             },
             "/api/board": {
               get: {
-                summary: "Full board snapshot with live funnel + playbook",
+                summary:
+                  "Full board snapshot: live funnel + playbook + cf_strategy",
+                description:
+                  "Board includes `cf_strategy` (twzrd.cf_strategy/v1) folded from SPRAT. Do not use for pay decisions.",
                 operationId: "getBoard",
                 parameters: [
                   {
@@ -82,7 +87,7 @@ export const Route = createFileRoute("/api/openapi.json")({
                 ],
                 responses: {
                   "200": {
-                    description: "Board snapshot",
+                    description: "Board snapshot with cf_strategy",
                     content: {
                       "application/json": {
                         schema: { type: "object" },
@@ -94,7 +99,7 @@ export const Route = createFileRoute("/api/openapi.json")({
             },
             "/api/board/status": {
               get: {
-                summary: "Compact live status + next actions",
+                summary: "Compact live status + next actions + cf_strategy summary",
                 operationId: "getBoardStatus",
                 responses: {
                   "200": {

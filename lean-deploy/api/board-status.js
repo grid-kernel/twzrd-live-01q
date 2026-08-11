@@ -1,4 +1,4 @@
-import { buildBoardSnapshot } from "../lib/board.mjs";
+import { buildBoardSnapshot, compactCfStrategy } from "../lib/board.mjs";
 import { cors, originFromReq, parseDone } from "../lib/http.mjs";
 
 export default async function handler(req, res) {
@@ -20,6 +20,7 @@ export default async function handler(req, res) {
           generated_at: board.generated_at,
           north_star: board.north_star,
           live: board.live,
+      cf_strategy: compactCfStrategy(board.cf_strategy),
           next_actions: board.next_actions.map((m) => ({
             id: m.id,
             title: m.title,

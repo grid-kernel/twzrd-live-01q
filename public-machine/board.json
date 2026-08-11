@@ -1,14 +1,14 @@
 {
   "schema": "twzrd.live_board/v1",
   "id": "twzrd-live-0-1q",
-  "version": "1.0.0",
-  "generated_at": "2026-08-11T21:43:24.543Z",
+  "version": "1.1.0",
+  "generated_at": "2026-08-11T21:55:54.572Z",
   "product": {
     "name": "TWZRD Live 0→1Q",
     "owner": "TWZRD",
     "intel_base": "https://intel.twzrd.xyz",
-    "human_ui": "http://127.0.0.1:8080/",
-    "machine_start": "http://127.0.0.1:8080/llms.txt"
+    "human_ui": "https://twzrd-live-board.vercel.app/",
+    "machine_start": "https://twzrd-live-board.vercel.app/llms.txt"
   },
   "north_star": {
     "title": "Live 0→1 for Q1",
@@ -309,7 +309,7 @@
   ],
   "live": {
     "ok": true,
-    "fetched_at": "2026-08-11T21:43:24.543Z",
+    "fetched_at": "2026-08-11T21:55:54.572Z",
     "health": {
       "status": "ok",
       "package_version": "0.5.6",
@@ -325,9 +325,9 @@
       }
     },
     "day0": {
-      "free_card_hits": 2750,
-      "free_card_hits_internal": 2718,
-      "free_card_hits_external": 32,
+      "free_card_hits": 1547,
+      "free_card_hits_internal": 1531,
+      "free_card_hits_external": 16,
       "free_card_hits_unattributed": 0,
       "free_card_attribution_note": "external is the only demand-bearing number here; internal is our own swarm/tooling and unattributed is context-free, never external",
       "portable_proof_upsell_shown": 0,
@@ -336,9 +336,9 @@
       "portable_proof_upsell_shown_unattributed": 0,
       "portable_proof_upsell_note": "merchant_card path only, interim in-memory counter (per-worker, non-durable, resets on restart) — the preflight path's impressions are durable, see preflight_requests.portable_proof_upsell_trigger instead",
       "paid_merchant_mints": 0,
-      "receipt_verifies": 12,
+      "receipt_verifies": 6,
       "receipt_verify_valid": 0,
-      "receipt_verify_invalid": 12,
+      "receipt_verify_invalid": 6,
       "dead_listing_demotions": 0,
       "paid_trust_real_corpus": 0,
       "paid_trust_self_or_payer": 0,
@@ -349,18 +349,18 @@
       "paid_trust_payer_external": 0,
       "paid_trust_payer_unknown": 0,
       "paid_trust_payer_note": "external = EXTERNAL_VERIFIED_WALLETS only (completed lineage audit); internal = INTERNAL_WALLETS / dogfood; unknown = unknown_pending_audit (default for anything new — never counted as external). Use paid_trust_payer_external for organic conversion, not raw paid_trust_total.",
-      "path_placeholder_hits": 337,
-      "template_alias_served": 337,
-      "path_invalid_pubkey_hits": 2,
+      "path_placeholder_hits": 203,
+      "template_alias_served": 203,
+      "path_invalid_pubkey_hits": 0,
       "path_placeholder_samples": [
-        "/v1/intel/merchant::solana_address",
-        "/v1/intel/quick::pubkey",
-        "/v1/intel/quick:{pubkey}",
-        "/v1/intel/merchant:{pubkey}",
         "/v1/intel/trust::pubkey",
-        "/v1/intel/trust:{pubkey}",
+        "/v1/intel/quick::solana_address",
+        "/v1/intel/quick:{pubkey}",
         "/v1/intel/merchant_card:{wallet}",
-        "/v1/intel/quick::solana_address"
+        "/v1/intel/quick::pubkey",
+        "/v1/intel/merchant::solana_address",
+        "/v1/intel/merchant::pubkey",
+        "/v1/intel/merchant:{pubkey}"
       ],
       "paid_trust_total": 0,
       "gate_evals": 0,
@@ -373,8 +373,8 @@
       "grade_cache_hits": 0,
       "grade_flagged": 0,
       "grade_receipt_minted": 0,
-      "door_requests": 2752,
-      "door_anon": 2752,
+      "door_requests": 1549,
+      "door_anon": 1549,
       "door_proven": 0,
       "door_receipt": 0,
       "door_rate_limited": 0,
@@ -383,12 +383,12 @@
         "note": "door-zero funnel: process-local mechanism usage; NOT external adoption (metric stays counted_external guard runs)",
         "stages": {
           "grade_hits": 0,
-          "free_card_hits": 2750,
-          "free_card_hits_internal": 2718,
-          "free_card_hits_external": 32,
+          "free_card_hits": 1547,
+          "free_card_hits_internal": 1531,
+          "free_card_hits_external": 16,
           "free_card_hits_unattributed": 0,
           "paid_trust_total": 0,
-          "receipt_verifies": 12
+          "receipt_verifies": 6
         },
         "conversions": {
           "grade_to_free_card": null,
@@ -398,8 +398,8 @@
           "basis": "free_card_hits_external"
         },
         "door": {
-          "requests": 2752,
-          "anon": 2752,
+          "requests": 1549,
+          "anon": 1549,
           "proven": 0,
           "receipt": 0,
           "rate_limited": 0,
@@ -416,7 +416,7 @@
       "merchant_attach_error": 0
     },
     "funnel": {
-      "external_cards": 32,
+      "external_cards": 16,
       "gate_evals": 0,
       "gate_blocks": 0,
       "paid_external": 0
@@ -428,6 +428,247 @@
       "paid_external": "empty"
     },
     "diagnosis": "Advisory demand exists without enforcement. Free cards are happening; nobody has installed the buyer gate. Lead with refuse-before-sign."
+  },
+  "cf_strategy": {
+    "schema": "twzrd.cf_strategy/v1",
+    "source": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json",
+    "source_schema": "https://twzrd.xyz/schema/sprat-manifest/v1",
+    "source_schema_version": "1.1.0",
+    "source_generated_at": "2026-08-11T21:45:00.000Z",
+    "thesis": {
+      "headline": "Own the rails that put every Cloudflare Agent on Solana.",
+      "subcopy": "Cloudflare owns agent distribution. Solana owns settlement speed. SPRAT by TWZRD is the trust + x402 facilitator middle."
+    },
+    "decision": {
+      "summary": "Hold engineering on Agents MCP SVM. Flood live x402-hono Solana path. MCP-SVM is watch + optional read-only spike only — not build-now.",
+      "pick": "brief+hold",
+      "ship_now": [
+        "Workers + x402-hono + network:solana + https://intel.twzrd.xyz",
+        "Public monorepo docs: examples/cloudflare-x402-seller README + CF_AGENTS_SOLANA.md (#1924/#1925/#1928)"
+      ],
+      "do_not": [
+        "Re-probe Signal B weekly as if it is the product",
+        "Build cloudflare/agents SVM fork this week without a go/no-go spike",
+        "Claim generational moat or facilitator monopoly",
+        "Treat paid MCP Solana as unblocked",
+        "Reopen #596 as pure Solana enhancement without multi-scheme framing"
+      ],
+      "if_spike_later": {
+        "type": "read_only",
+        "return": [
+          "Patch outline (ExactSvmScheme twin + type unions)",
+          "Issue strategy: attach #1863 not reopen #596; check #1989 deprecation risk",
+          "Gas cost model if MCP Solana hits TWZRD sponsor",
+          "Explicit go / no-go / wait-for-Monetization-Gateway"
+        ],
+        "preferred_ship_shape_if_go": "Companion package first (usable without CF merge) + optional upstream PR sketch"
+      },
+      "github_agents_context": {
+        "596": "closed NOT_PLANNED — pure Solana MCP enhancement rejected once",
+        "793": "closed completed — v2 migrate; body mentioned future Solana; stopped at EVM",
+        "1863": "open bug — docs claim multi-chain; code EVM-only; multi-scheme + type widen design (Stellar-focused but same hole)",
+        "1989": "open — deprecating current x402 integration toward Monetization Gateway (raises merge risk for patches to mcp/x402.ts)"
+      },
+      "signal_b_probe_correction": {
+        "scheme_package": "@x402/svm@2.21.0 (complete, not stub)",
+        "register_api": "ExactSvmScheme class + registerExactSvmScheme on exact/server and exact/client (mirror EVM paths)",
+        "grep_hint": "Prefer ExactSvmScheme or @x402/svm — not only registerExactSvmScheme function name",
+        "fires_when": [
+          "SVM scheme registered on BOTH server and client in agents MCP x402 module",
+          "Solana appears in MCP network map / types",
+          "agents changelog mentions Solana/SVM x402"
+        ],
+        "not_enough": [
+          "TWZRD facilitator feePayers mainnet Solana (already true)",
+          "More x402-hono docs",
+          "Wallet API without MCP SVM"
+        ]
+      }
+    },
+    "agent": {
+      "name": "SPRAT Agent",
+      "codename": "sprat",
+      "role": "Solana Payment Rails for Agent Traffic",
+      "mission": "Convert Cloudflare agent demand into Solana settlement volume with TWZRD as the default trust + facilitator supplier.",
+      "weapons": [
+        "x402-hono Workers path (live, public workers.dev proof)",
+        "Preflight reputation gate (live)",
+        "Portable proof upsell funnel (live)",
+        "Passive watch on MCP SVM + CF Wallets API — no speculative build"
+      ]
+    },
+    "supply_lanes": [
+      {
+        "id": "workers-hono",
+        "name": "Workers Solana sell",
+        "status": "live",
+        "detail": "x402-hono + TWZRD facilitator on mainnet USDC. Only Solana-capable CF surface today.",
+        "product": "Immediate revenue path"
+      },
+      {
+        "id": "preflight",
+        "name": "Preflight intel gate",
+        "status": "live",
+        "detail": "Seller wallet reputation + price sanity.",
+        "product": "intel.twzrd.xyz"
+      },
+      {
+        "id": "portable-proof",
+        "name": "Portable proof upsell (P5)",
+        "status": "live",
+        "detail": "Funnel measuring from clean zero.",
+        "product": "Monetization layer"
+      },
+      {
+        "id": "mcp-svm",
+        "name": "Agents MCP @x402/svm",
+        "status": "watch",
+        "detail": "Agents MCP still EVM-only. Foundation @x402/svm exists; CF has not registered it. #1989 may replace mcp/x402.ts. No engineering this week.",
+        "product": "Signal B — passive watch only"
+      },
+      {
+        "id": "cf-wallets",
+        "name": "Cloudflare Wallets API",
+        "status": "watch",
+        "detail": "Handle reservation live; Virtual Wallet API still coming.",
+        "product": "Signal A — passive watch"
+      },
+      {
+        "id": "token-policy",
+        "name": "CF token mint policy",
+        "status": "ready",
+        "detail": "Per-job token policy ready. CF_WORKERS_DEPLOY_TOKEN separate from CF_API_TOKEN analytics.",
+        "product": "Ops readiness"
+      }
+    ],
+    "flow_steps": [
+      {
+        "id": "agent",
+        "label": "CF Agent / Worker",
+        "detail": "Agent requests a paid resource.",
+        "side": "cf"
+      },
+      {
+        "id": "challenge",
+        "label": "HTTP 402 challenge",
+        "detail": "network: solana, USDC amount.",
+        "side": "cf"
+      },
+      {
+        "id": "preflight",
+        "label": "TWZRD preflight",
+        "detail": "Seller wallet reputation + price sanity.",
+        "side": "twzrd"
+      },
+      {
+        "id": "sign",
+        "label": "Solana sign",
+        "detail": "SPL USDC transfer.",
+        "side": "solana"
+      },
+      {
+        "id": "settle",
+        "label": "Facilitator settle",
+        "detail": "TWZRD verifies + settles.",
+        "side": "twzrd"
+      },
+      {
+        "id": "serve",
+        "label": "Resource delivered",
+        "detail": "200 + Payment-Response.",
+        "side": "cf"
+      }
+    ],
+    "metrics": [
+      {
+        "label": "Facilitator path",
+        "value": "Solana mainnet",
+        "hint": "USDC exact"
+      },
+      {
+        "label": "CF handle",
+        "value": "twzrd.cloudflare.pay",
+        "hint": "reserved"
+      },
+      {
+        "label": "Live proof",
+        "value": "x402-seller-hack-20260810.fp4b5ksccw.workers.dev",
+        "hint": "ops-funded payer caveat"
+      },
+      {
+        "label": "MCP SVM",
+        "value": "not registered",
+        "hint": "watch Signal B; #1989 deprecation risk"
+      }
+    ],
+    "integration": {
+      "network": "solana",
+      "facilitator_url": "https://intel.twzrd.xyz",
+      "snippet_language": "typescript",
+      "surface": "x402-hono",
+      "not_surface": "agents/x402 withX402 paidTool (EVM-only today)"
+    },
+    "signals": {
+      "A": {
+        "id": "cf-wallets-api",
+        "label": "cf-wallets-api",
+        "status": "watch",
+        "fires_when": "Stable documentable Virtual Wallet API with create/list/fund ops.",
+        "watch": "Stable Virtual Wallet API — no speculative CF Wallets scopes until then"
+      },
+      "B": {
+        "id": "mcp-x402-svm",
+        "label": "mcp-x402-svm",
+        "status": "watch",
+        "fires_when": "Agents MCP registers SVM scheme on both server and client; Solana in network map; changelog mentions Solana/SVM x402.",
+        "probe": "https://raw.githubusercontent.com/cloudflare/agents/main/packages/agents/src/mcp/x402.ts",
+        "probe_hint": "grep ExactSvmScheme or @x402/svm (scheme package is class-based, Foundation-complete at 2.21.0)",
+        "related_issues": [
+          "https://github.com/cloudflare/agents/issues/1863",
+          "https://github.com/cloudflare/agents/issues/1989",
+          "https://github.com/cloudflare/agents/issues/596"
+        ],
+        "watch": "registerExactSvm / @x402/svm on both sides; #1863 open, #596 NOT_PLANNED, #1989 deprecation risk"
+      }
+    },
+    "posture": {
+      "ship_now": [
+        "workers-hono",
+        "preflight",
+        "portable-proof"
+      ],
+      "hold": [
+        "mcp-svm",
+        "cf-wallets"
+      ],
+      "ready_not_shipped": [
+        "token-policy"
+      ],
+      "guardrail": "Flood Solana volume through live Workers + x402-hono + intel facilitator. Do not pre-build speculative CF Wallets scopes. Do not engineer Agents MCP SVM this week without an explicit spike go. Signal B is not product until CF registers SVM (or you ship a companion package after a written go/no-go)."
+    },
+    "company_sentence": "Scarcity for paying agents isn’t chain access — it’s a machine-readable *should I pay this?*, free at the top, enforced at the wallet hook, monetized as portable proof.",
+    "not_this_board": "Pay decisions → https://intel.twzrd.xyz/v1/intel/preflight — never this board",
+    "routing": {
+      "cf_strategy": "This block (CF→Solana posture)",
+      "execution": "Live Board next_actions / moves (Path B 0→1Q)",
+      "product": "intel.twzrd.xyz (should I pay?)"
+    },
+    "sprat_mirror": {
+      "self": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json",
+      "llms_txt": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/llms.txt",
+      "agent_md": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/agent.md",
+      "openapi": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/openapi.json",
+      "lanes": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/lanes.json"
+    },
+    "external": {
+      "intel_llms": "https://intel.twzrd.xyz/llms.txt",
+      "facilitator": "https://intel.twzrd.xyz",
+      "cloudflare_agents_x402": "https://raw.githubusercontent.com/cloudflare/agents/main/packages/agents/src/mcp/x402.ts",
+      "example_readme": "https://github.com/twzrd-sol/wzrd-final/tree/main/examples/cloudflare-x402-seller",
+      "live_worker": "https://x402-seller-hack-20260810.fp4b5ksccw.workers.dev/paid/hello"
+    },
+    "fetched_at": "2026-08-11T21:55:54.606Z",
+    "live_source": true
   },
   "next_actions": [
     {
@@ -540,14 +781,16 @@
     "notes": "No wallet. No USDC. Primary Q1 proof that the buyer gate can refuse before sign."
   },
   "endpoints": {
-    "human_ui": "http://127.0.0.1:8080/",
-    "llms_txt": "http://127.0.0.1:8080/llms.txt",
-    "board_json": "http://127.0.0.1:8080/api/board",
-    "status_json": "http://127.0.0.1:8080/api/board/status",
-    "moves_json": "http://127.0.0.1:8080/api/board/moves",
-    "openapi": "http://127.0.0.1:8080/api/openapi.json",
-    "intel_health_proxy": "http://127.0.0.1:8080/api/intel-health",
+    "human_ui": "https://twzrd-live-board.vercel.app/",
+    "llms_txt": "https://twzrd-live-board.vercel.app/llms.txt",
+    "board_json": "https://twzrd-live-board.vercel.app/api/board",
+    "status_json": "https://twzrd-live-board.vercel.app/api/board/status",
+    "moves_json": "https://twzrd-live-board.vercel.app/api/board/moves",
+    "openapi": "https://twzrd-live-board.vercel.app/api/openapi.json",
+    "intel_health_proxy": "https://twzrd-live-board.vercel.app/api/intel-health",
     "intel_upstream": "https://intel.twzrd.xyz/health",
-    "intel_llms": "https://intel.twzrd.xyz/llms.txt"
+    "intel_llms": "https://intel.twzrd.xyz/llms.txt",
+    "intel_preflight": "https://intel.twzrd.xyz/v1/intel/preflight",
+    "sprat_source": "https://raw.githubusercontent.com/twzrd-sol/sprat-brief/main/sprat.json"
   }
 }

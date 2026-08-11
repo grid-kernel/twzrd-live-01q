@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   buildBoardSnapshot,
+  compactCfStrategy,
   jsonResponse,
   parseDoneParam,
   requestOrigin,
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/api/board/status")({
           generated_at: board.generated_at,
           north_star: board.north_star,
           live: board.live,
+          cf_strategy: compactCfStrategy(board.cf_strategy),
           next_actions: board.next_actions.map((m) => ({
             id: m.id,
             title: m.title,
