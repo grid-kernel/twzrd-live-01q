@@ -1,0 +1,7 @@
+{
+  "name": "twzrd-live-01q",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "TWZRD Live 0→1Q — machine-readable operator board for agents"
+}

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TWZRD Live 0→1Q</title>
+  <meta name="description" content="Operator board for intel.twzrd.xyz — machine-readable Q1 demand playbook." />
+  <style>
+    :root {
+      --bg: #080809; --surface: #101012; --surface2: #16161a;
+      --fg: #f2f2f4; --muted: #9a9aa3; --subtle: #6b6b74;
+      --border: #27272e; --brand: #c9a46c; --ok: #6f9f7a; --warn: #c4a35a; --danger: #c07070;
+      --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--fg); line-height: 1.5; }
+    a { color: var(--fg); }
+    main { max-width: 960px; margin: 0 auto; padding: 24px 16px 64px; }
+    header { border-bottom: 1px solid var(--border); padding: 16px 0 20px; margin-bottom: 20px; }
+    h1 { margin: 0; font-size: 1.35rem; letter-spacing: -0.02em; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-top: 6px; max-width: 52ch; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; border: 1px solid color-mix(in oklab, var(--ok) 35%, transparent); background: color-mix(in oklab, var(--ok) 12%, transparent); color: var(--ok); border-radius: 999px; padding: 3px 8px; }
+    .badge.bad { border-color: color-mix(in oklab, var(--warn) 35%, transparent); background: color-mix(in oklab, var(--warn) 12%, transparent); color: var(--warn); }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+    .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--subtle); }
+    .value { font-variant-numeric: tabular-nums; font-size: 1.75rem; font-weight: 600; margin-top: 6px; }
+    .hint { font-size: 12px; color: var(--subtle); margin-top: 4px; }
+    .diag { margin-top: 16px; }
+    pre, code { font-family: var(--mono); }
+    pre { background: #050506; border: 1px solid var(--border); border-radius: 12px; padding: 12px; overflow: auto; font-size: 12px; white-space: pre-wrap; word-break: break-word; }
+    .endpoints a { display: flex; justify-content: space-between; gap: 8px; text-decoration: none; border: 1px solid var(--border); background: var(--surface2); border-radius: 12px; padding: 10px 12px; margin-top: 8px; font-size: 13px; }
+    .endpoints a:hover { border-color: #3a3a44; }
+    .mono { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+    ol { padding-left: 1.2rem; }
+    li { margin: 8px 0; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    footer { margin-top: 32px; border-top: 1px solid var(--border); padding-top: 16px; font-size: 12px; color: var(--subtle); text-align: center; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;">
+        <h1>TWZRD Live 0→1Q</h1>
+        <span id="liveBadge" class="badge bad">Loading pulse…</span>
+      </div>
+      <p class="sub">Operator board for <a href="https://intel.twzrd.xyz">intel.twzrd.xyz</a>. Agents: read <a href="/llms.txt"><code>/llms.txt</code></a> then <a href="/api/board"><code>/api/board</code></a> — do not scrape this HTML.</p>
+    </header>
+
+    <section class="card">
+      <div class="label">North star</div>
+      <p id="north" style="margin:8px 0 0; font-weight:500;"></p>
+    </section>
+
+    <section style="margin-top:16px;">
+      <div class="label" style="margin-bottom:8px;">Live demand funnel</div>
+      <div class="grid" id="funnel"></div>
+      <div class="card diag">
+        <div class="label">Diagnosis</div>
+        <p id="diagnosis" class="muted" style="margin:8px 0 0;"></p>
+      </div>
+    </section>
+
+    <section class="card endpoints" style="margin-top:16px;">
+      <div class="label">Machine endpoints</div>
+      <a href="/llms.txt"><span><strong>GET /llms.txt</strong><br><span class="mono">Agent start</span></span><span>→</span></a>
+      <a href="/api/board"><span><strong>GET /api/board</strong><br><span class="mono">Full live snapshot</span></span><span>→</span></a>
+      <a href="/api/board/status"><span><strong>GET /api/board/status</strong><br><span class="mono">Compact status</span></span><span>→</span></a>
+      <a href="/api/board/moves"><span><strong>GET /api/board/moves</strong><br><span class="mono">Playbook moves</span></span><span>→</span></a>
+      <a href="/api/openapi.json"><span><strong>GET /api/openapi.json</strong><br><span class="mono">OpenAPI 3.1</span></span><span>→</span></a>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <div class="label">Do these next</div>
+      <ol id="next"></ol>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <div class="label">Path B dogfood</div>
+      <pre id="dogfood"></pre>
+    </section>
+
+    <footer>
+      TWZRD · Machine trust for autonomous spend ·
+      <a href="https://github.com/grid-kernel/twzrd-live-01q">source</a> ·
+      <a href="https://intel.twzrd.xyz/llms.txt">intel llms.txt</a>
+    </footer>
+  </main>
+  <script>
+    async function load() {
+      const res = await fetch("/api/board", { cache: "no-store" });
+      const b = await res.json();
+      const live = b.live?.ok;
+      const badge = document.getElementById("liveBadge");
+      badge.textContent = live ? "Intel live" : "Pulse degraded";
+      badge.className = "badge" + (live ? "" : " bad");
+      document.getElementById("north").textContent = b.north_star?.statement || "";
+      document.getElementById("diagnosis").textContent = b.live?.diagnosis || b.live?.error || "";
+      const funnel = b.live?.funnel || {};
+      const status = b.live?.funnel_status || {};
+      const stages = [
+        ["external_cards", "External free cards", "Advisory demand"],
+        ["gate_evals", "Gate evals", "Path B primary"],
+        ["gate_blocks", "Gate blocks", "Refusals"],
+        ["paid_external", "Paid trust external", "Portable V6"],
+      ];
+      document.getElementById("funnel").innerHTML = stages.map(([k, label, hint]) => {
+        const st = status[k] || "empty";
+        return `<div class="card"><div class="label">${label} · ${st}</div><div class="value">${Number(funnel[k]||0).toLocaleString()}</div><div class="hint">${hint}</div></div>`;
+      }).join("");
+      document.getElementById("next").innerHTML = (b.next_actions || []).slice(0,5).map((m,i) =>
+        `<li><strong>${m.title}</strong><div class="mono">${m.id} · ${m.impact} · ${m.horizon}<br>${m.metric}</div></li>`
+      ).join("");
+      document.getElementById("dogfood").textContent = (b.dogfood?.command || "") + "\n# " + (b.dogfood?.expected || "");
+    }
+    load().catch((e) => {
+      document.getElementById("diagnosis").textContent = String(e);
+    });
+  </script>
+</body>
+</html>
