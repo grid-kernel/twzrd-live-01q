@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SignedIn, SignedOut, UserButton } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { AttestationPanel } from "@/components/live/attestation-panel";
 import { CfStrategyPanel } from "@/components/live/cf-strategy-panel";
 import { DogfoodBlock } from "@/components/live/dogfood-block";
 import { FunnelPanel } from "@/components/live/funnel-panel";
@@ -93,10 +94,16 @@ function Home() {
         </p>
         <div className="flex shrink-0 items-center gap-2">
           <Link
+            to="/attest"
+            className="rounded-md border border-border bg-surface px-2.5 py-1 text-[11px] font-medium text-muted transition-colors hover:text-fg"
+          >
+            Attest
+          </Link>
+          <Link
             to="/path-b"
             className="rounded-md border border-brand/30 bg-brand/10 px-2.5 py-1 text-[11px] font-medium text-fg transition-colors hover:bg-brand/15"
           >
-            Path B runbook
+            Path B
           </Link>
           {isPending ? (
             <div className="h-8 w-8 animate-pulse rounded-full bg-surface-3" />
@@ -120,9 +127,8 @@ function Home() {
       <main className="mx-auto max-w-6xl space-y-5 overflow-x-hidden px-4 py-5 sm:space-y-6 sm:px-6 sm:py-8">
         <NorthStar />
         <FunnelPanel snapshot={snapshot} />
-
+        <AttestationPanel compact />
         <PathBRunbookPanel compact />
-
         <CfStrategyPanel />
         <MachineEndpoints />
 
@@ -137,30 +143,32 @@ function Home() {
                 Why this board
               </p>
               <h2 className="mt-1 text-base font-semibold tracking-tight">
-                Live ≠ adopted
+                Trust edge, not agent-social
               </h2>
               <div className="mt-3 space-y-3 text-sm leading-relaxed text-muted">
                 <p>
-                  intel.twzrd.xyz is already mainnet-live: MCP, preflight,
-                  merchant cards, settle shadow, corpus. Day0 shows the gap —
-                  external free cards are thin,{" "}
-                  <span className="text-fg">gate_evals are zero</span>, paid
-                  external trust is zero.
+                  Product claim: external verification for agentic commerce —
+                  who an agent acts for, scope, freshness, allow/warn/block —
+                  before the wallet signs. See{" "}
+                  <Link
+                    to="/attest"
+                    className="text-fg underline-offset-2 hover:underline"
+                  >
+                    attestation demo
+                  </Link>
+                  .
                 </p>
                 <p>
-                  Q1 is not more surface area. It is Path B seats: buyer clients
-                  that refuse before sign, proven by external metrics and refuse
-                  transcripts. Run{" "}
-                  <Link to="/path-b" className="text-fg underline-offset-2 hover:underline">
-                    the external integration runbook
-                  </Link>{" "}
-                  with Vicky → Nick → Lucas before any founder post.
+                  Day0 still shows thin external demand:{" "}
+                  <span className="text-fg">gate_evals near zero</span>. Path B
+                  seats (Vicky → Nick → Lucas) close that gap. Distribution
+                  channels (OpenClaw/npm) ship packages; they are not the
+                  product.
                 </p>
                 <ul className="space-y-1.5 border-t border-border pt-3 text-xs text-subtle">
-                  <li>· Check off moves as you ship them</li>
-                  <li>· Notes stay in this browser</li>
-                  <li>· Pulse refreshes from /health every 60s</li>
-                  <li>· Agents: /llms.txt + /api/board (+ path_b_runbook)</li>
+                  <li>· Agents: /llms.txt → /api/board</li>
+                  <li>· Attest: /api/attestation · Path B: /api/path-b</li>
+                  <li>· Pay decisions: intel preflight only</li>
                 </ul>
               </div>
             </section>
@@ -240,16 +248,16 @@ function Home() {
             twzrd.xyz
           </a>
           {" · "}
+          <Link to="/attest" className="text-muted hover:text-fg">
+            attest
+          </Link>
+          {" · "}
           <Link to="/path-b" className="text-muted hover:text-fg">
             path-b
           </Link>
           {" · "}
           <a href="/llms.txt" className="text-muted hover:text-fg">
             llms.txt
-          </a>
-          {" · "}
-          <a href="/api/board" className="text-muted hover:text-fg">
-            api/board
           </a>
         </footer>
       </main>

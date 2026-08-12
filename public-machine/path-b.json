@@ -1,7 +1,7 @@
 {
   "schema": "twzrd.path_b_runbook/v1",
   "version": "1.0.0",
-  "generated_at": "2026-08-11T23:00:47.538Z",
+  "generated_at": "2026-08-12T00:27:55.833Z",
   "title": "Path B External Integration Runbook",
   "claim": "Externally controlled refuse-before-sign: a buyer pipeline that is not ours evaluates and can BLOCK payment before any Solana signer runs.",
   "why_first": "Distribution without external gate_evals is amplification of supply. Path B is the only missing proof. Founder posts wait until one attributable external artifact exists.",

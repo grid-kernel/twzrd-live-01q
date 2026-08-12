@@ -1,0 +1,256 @@
+/** Schultz-shaped agent attestation surface — demo + machine contract. */
+
+export const ATTESTATION_SCHEMA = "twzrd.agent_attestation/v1" as const;
+export const ATTESTATION_VERSION = "1.0.0";
+
+export type Decision = "ALLOW" | "WARN" | "BLOCK" | "REVIEW";
+
+export type AttestationCard = {
+  id: string;
+  label: string;
+  fictional: true;
+  decision: Decision;
+  principal: string;
+  agent_id: string;
+  wallet_hint: string;
+  scope: string[];
+  scope_note: string;
+  freshness: {
+    snapshot_age: string;
+    status: "fresh" | "stale" | "expired";
+  };
+  risk: {
+    score: number;
+    flags: string[];
+  };
+  receipt: {
+    kind: "none" | "v6_demo" | "expired_demo";
+    note: string;
+  };
+  narrative: string;
+};
+
+export type AttestationPack = {
+  schema: typeof ATTESTATION_SCHEMA;
+  version: string;
+  generated_at: string;
+  title: string;
+  thesis: string;
+  disclaimer: string;
+  not_meta_affiliated: string;
+  questions: Array<{ id: string; q: string; maps_to: string }>;
+  cards: AttestationCard[];
+  plug_in: {
+    title: string;
+    free_preflight_curl: string;
+    path_b_gate: string;
+    paid_trust_note: string;
+    live_endpoints: Record<string, string>;
+  };
+  distribution: {
+    note: string;
+    openclaw: {
+      clawhub_skills: string[];
+      npm_packages: Array<{ name: string; role: string }>;
+      registry_split: string;
+    };
+    primary_pull: string;
+  };
+  narrative_angles: Array<{ angle: string; hook: string }>;
+  endpoints?: Record<string, string>;
+};
+
+const PREFLIGHT_CURL = `curl -sS -X POST https://intel.twzrd.xyz/v1/intel/preflight \\
+  -H 'content-type: application/json' \\
+  -d '{"seller_wallet":"GFpLvocNdEjnSsLH3VJQL6wGcjGxTbUBrj6fqN3Qe1Gs","price_usdc":0.01,"agent_intent":"preflight"}'`;
+
+const PATH_B = `npm i twzrd-x402-gate@0.8.14 x402-solana@2.1.0
+# wire beforePayment → evaluate → BLOCK aborts before signTransaction`;
+
+export function buildAttestationPack(opts?: {
+  origin?: string;
+  generated_at?: string;
+}): AttestationPack {
+  const origin = (opts?.origin ?? "").replace(/\/$/, "");
+  const generated_at = opts?.generated_at ?? new Date().toISOString();
+
+  return {
+    schema: ATTESTATION_SCHEMA,
+    version: ATTESTATION_VERSION,
+    generated_at,
+    title: "Agent attestation console",
+    thesis:
+      "TWZRD is the external verification edge on the agent graph: who this agent acts for, what it may spend on, how fresh the evidence is, and whether spend should ALLOW / WARN / BLOCK — before the wallet signs.",
+    disclaimer:
+      "Sample cards are fictional and labeled. They illustrate decision shape, not real third-party verification. TWZRD does not claim legal identity attestation; it scores observed settlement / counterparty risk for agent payments.",
+    not_meta_affiliated:
+      "Not affiliated with or endorsed by Meta Platforms, Inc. Public CDO quotes about wanting an external verification plug-in are market context only.",
+    questions: [
+      {
+        id: "who",
+        q: "Who does this agent represent?",
+        maps_to: "principal + agent_id (attribution / delegation claim)",
+      },
+      {
+        id: "scope",
+        q: "What is it allowed to do?",
+        maps_to: "scope[] (buy, book, quote, checkout) — out-of-scope spend is a risk flag",
+      },
+      {
+        id: "fresh",
+        q: "How fresh is the attestation?",
+        maps_to: "caller-intel / corpus snapshot age",
+      },
+      {
+        id: "risk",
+        q: "Revocation / risk / decision?",
+        maps_to: "readiness_card.decision allow|warn|block + flags",
+      },
+    ],
+    cards: [
+      {
+        id: "demo-allow-travel",
+        label: "Verified travel booker",
+        fictional: true,
+        decision: "ALLOW",
+        principal: "Acme Travel Ops (demo principal)",
+        agent_id: "agent:demo.acme.travel.booker",
+        wallet_hint: "GFp…e1Gs (demo shape)",
+        scope: ["quote", "book", "pay_merchant"],
+        scope_note: "In-scope hotel hold + small USDC settle",
+        freshness: { snapshot_age: "12m", status: "fresh" },
+        risk: { score: 18, flags: [] },
+        receipt: {
+          kind: "v6_demo",
+          note: "Illustrative signed V6 shape only — not a live mint",
+        },
+        narrative:
+          "Clean allow path: principal labeled, scope matched, fresh snapshot, no wash flags.",
+      },
+      {
+        id: "demo-allow-narrow",
+        label: "Merchant bot · narrow scope",
+        fictional: true,
+        decision: "ALLOW",
+        principal: "Northwind Shop (demo principal)",
+        agent_id: "agent:demo.northwind.checkout",
+        wallet_hint: "4Lk…pZUE (demo shape)",
+        scope: ["price_quote", "checkout"],
+        scope_note: "Book / ads out of scope — would WARN if attempted",
+        freshness: { snapshot_age: "2h", status: "fresh" },
+        risk: { score: 24, flags: ["scope_narrow"] },
+        receipt: { kind: "none", note: "Free preflight only" },
+        narrative:
+          "Allow with narrow scope. Delegation is partial; still not identity KYC.",
+      },
+      {
+        id: "demo-review-stale",
+        label: "Stale quoter",
+        fictional: true,
+        decision: "REVIEW",
+        principal: "Unknown / thin history",
+        agent_id: "agent:demo.orphan.quoter",
+        wallet_hint: "1111…1112 (demo shape)",
+        scope: ["price_quote"],
+        scope_note: "No portable proof; corpus thin",
+        freshness: { snapshot_age: "9d", status: "stale" },
+        risk: { score: 61, flags: ["thin_history", "stale_snapshot"] },
+        receipt: {
+          kind: "expired_demo",
+          note: "Prior demo receipt expired — re-preflight required",
+        },
+        narrative:
+          "Review / warn class: proceed only deliberately; buy portable proof or refuse.",
+      },
+      {
+        id: "demo-block-spoof",
+        label: "Checkout spoof pattern",
+        fictional: true,
+        decision: "BLOCK",
+        principal: "Unattributed / spoof risk",
+        agent_id: "agent:demo.spoof.checkout",
+        wallet_hint: "BJG…R7VQ (wash-education shape only)",
+        scope: ["checkout", "drain"],
+        scope_note: "Out-of-policy spend attempt",
+        freshness: { snapshot_age: "4m", status: "fresh" },
+        risk: {
+          score: 94,
+          flags: ["wash_shaped", "fleet_cluster", "revocation_candidate"],
+        },
+        receipt: { kind: "none", note: "Refuse before sign — Path B" },
+        narrative:
+          "Block path: gate must abort before signTransaction. Success = signer_invocation_count=0.",
+      },
+    ],
+    plug_in: {
+      title: "Plug into us (real endpoints)",
+      free_preflight_curl: PREFLIGHT_CURL,
+      path_b_gate: PATH_B,
+      paid_trust_note:
+        "Paid V6 / trust calls buy portable proof after free preflight — they do not replace refuse-before-sign enforcement.",
+      live_endpoints: {
+        preflight: "https://intel.twzrd.xyz/v1/intel/preflight",
+        health: "https://intel.twzrd.xyz/health",
+        llms: "https://intel.twzrd.xyz/llms.txt",
+        path_b_runbook: origin
+          ? `${origin}/api/path-b`
+          : "https://twzrd-live-01q-host.vercel.app/api/path-b",
+        live_board: origin
+          ? `${origin}/api/board`
+          : "https://twzrd-live-01q-host.vercel.app/api/board",
+      },
+    },
+    distribution: {
+      note:
+        "Publishing is live (npm + ClawHub). Agent execution / Moltbook social is optional distribution, not the product. Prefer Path B external gate_evals over free MCP hits.",
+      openclaw: {
+        clawhub_skills: ["twzrd-trust", "twzrd-clawrouter"],
+        npm_packages: [
+          { name: "twzrd-x402-gate", role: "buyer refuse-before-sign gate" },
+          { name: "twzrd-preflight", role: "OpenClaw plugin + CLI" },
+          {
+            name: "@wzrd_sol/plugin-trustgate",
+            role: "ElizaOS registry — NOT ClawHub",
+          },
+        ],
+        registry_split:
+          "OpenClaw → ClawHub; ElizaOS → eliza community registry. Same product idea, two registries.",
+      },
+      primary_pull:
+        "Evidence favors npm + x402 tooling velocity over ClawHub skill installs or Moltbook nostalgia.",
+    },
+    narrative_angles: [
+      {
+        angle: "External verifier",
+        hook: "Agent platforms want verification outside their system — curl our preflight.",
+      },
+      {
+        angle: "Open weights wave",
+        hook: "Local agents everywhere → identity/delegation problem explodes before spend.",
+      },
+      {
+        angle: "Agent graph vs friend graph",
+        hook: "Friend graph needed identity; agent graph needs delegation + spend proof.",
+      },
+      {
+        angle: "Path B first",
+        hook: "Refuse-before-sign is the product; free cards alone are not adoption.",
+      },
+    ],
+    endpoints: origin
+      ? {
+          human: `${origin}/attest`,
+          machine: `${origin}/api/attestation`,
+          path_b: `${origin}/api/path-b`,
+          board: `${origin}/api/board`,
+          llms: `${origin}/llms.txt`,
+        }
+      : {
+          human: "/attest",
+          machine: "/api/attestation",
+          path_b: "/api/path-b",
+          board: "/api/board",
+          llms: "/llms.txt",
+        },
+  };
+}

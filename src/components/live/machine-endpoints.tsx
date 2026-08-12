@@ -4,12 +4,20 @@ const PUBLIC_BASE = "https://twzrd-live-01q-host.vercel.app";
 
 const ENDPOINTS = [
   { path: "/llms.txt", label: "llms.txt", hint: "Agent start" },
+  { path: "/attest", label: "Attestation demo", hint: "Schultz-shaped UI" },
+  {
+    path: "/api/attestation",
+    label: "attestation JSON",
+    hint: "Who / scope / decision",
+  },
   { path: "/path-b", label: "Path B runbook", hint: "Screen-share UI" },
-  { path: "/api/path-b", label: "path-b JSON", hint: "External install + evidence" },
-  { path: "/api/board", label: "board JSON", hint: "Full snapshot + runbook" },
-  { path: "/api/board/status", label: "status JSON", hint: "Live + CF summary" },
-  { path: "/api/board/moves", label: "moves JSON", hint: "Playbook" },
-  { path: "/api/openapi.json", label: "OpenAPI", hint: "Schema" },
+  {
+    path: "/api/path-b",
+    label: "path-b JSON",
+    hint: "External install + evidence",
+  },
+  { path: "/api/board", label: "board JSON", hint: "Full snapshot" },
+  { path: "/api/board/status", label: "status JSON", hint: "Live summary" },
   { path: "/api/intel-health", label: "intel health", hint: "Live metrics" },
 ];
 
@@ -28,7 +36,7 @@ export function MachineEndpoints() {
             For other AIs — skip the HTML
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Public CORS-open host:{" "}
+            Public host:{" "}
             <a
               href={PUBLIC_BASE}
               target="_blank"
@@ -37,23 +45,15 @@ export function MachineEndpoints() {
             >
               twzrd-live-01q-host.vercel.app
             </a>
-            . Agents start at{" "}
-            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
+            . Start at{" "}
+            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs">
               /llms.txt
             </code>{" "}
             then{" "}
-            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
+            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs">
               /api/board
             </code>{" "}
-            (includes{" "}
-            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
-              path_b_runbook
-            </code>{" "}
-            +{" "}
-            <code className="rounded bg-bg px-1 py-0.5 font-mono text-xs text-fg">
-              cf_strategy
-            </code>
-            ).
+            (attestation + path_b + cf_strategy).
           </p>
         </div>
       </div>

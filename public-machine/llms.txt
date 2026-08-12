@@ -3,28 +3,31 @@
 > Operator board for getting intel.twzrd.xyz from live infra to live demand in Q1.
 > Humans use the UI. Agents should start here and prefer JSON endpoints.
 > **Canonical multi-agent host.** SPRAT CF strategy is folded into `/api/board` → `cf_strategy`.
-> **Path B external runbook** is folded into `/api/board` → `path_b_runbook` and `/api/path-b`.
+> **Path B external runbook** → `path_b_runbook` and `/api/path-b`.
+> **Agent attestation demo** → `attestation` and `/api/attestation`.
 > SPRAT GitHub = source extract / history only (not a second start-here).
 
 schema: twzrd.live_board/v1
-version: 1.2.0
-generated_at: 2026-08-11T23:00:47.770Z
+version: 1.3.0
+generated_at: 2026-08-12T00:27:55.753Z
 
 ## Routing (locked)
 
 ```text
-Live Board /llms.txt → /api/board  — start here (execution + CF strategy + Path B)
+Live Board /llms.txt → /api/board  — start here
+  board.attestation                 — who/scope/freshness/decision demo + plug-in curl
   board.path_b_runbook              — external refuse-before-sign runbook
   board.cf_strategy                 — CF→Solana posture (SPRAT fold)
   board.next_actions / moves        — Path B 0→1Q execution
   board.live                        — day0 funnel + intel health
-Human screen-share                  — /path-b
+Human: /attest · /path-b
 intel.twzrd.xyz                     — product (should I pay?)
 SPRAT GitHub                        — extract / history only
 ```
 
 | Agent needs… | Point at… |
 |---|---|
+| Agent attestation / plug-in demo | `/api/attestation` or `board.attestation` |
 | External Path B install + evidence | `/api/path-b` or `board.path_b_runbook` |
 | CF / Solana posture this week | `/api/board` → `cf_strategy` |
 | What next for external gate_evals | `/api/board` / `/api/board/status` |
@@ -41,16 +44,37 @@ An external agent client installs the TWZRD buyer gate and honors block before t
 
 ## Live diagnosis
 
-Advisory demand exists without enforcement. Free cards are happening; nobody has installed the buyer gate. Lead with refuse-before-sign.
+Infra is live; demand is not. Zero external free cards and zero gate_evals — Path B has no external seat yet.
 
 ### Funnel (external-demand oriented)
 
 | Stage | Value | Status |
 |---|---:|---|
-| External free cards | 35 | thin |
+| External free cards | 0 | empty |
 | Gate evals (Path B) | 0 | empty |
 | Gate blocks | 0 | empty |
 | Paid trust external | 0 | empty |
+
+## Agent attestation (`attestation`)
+
+schema: twzrd.agent_attestation/v1 · v1.0.0
+
+**Thesis:** TWZRD is the external verification edge on the agent graph: who this agent acts for, what it may spend on, how fresh the evidence is, and whether spend should ALLOW / WARN / BLOCK — before the wallet signs.
+
+Four questions: who it represents · scope · freshness · risk/decision.
+
+Sample cards are **fictional** (labeled). Real plug-in:
+```bash
+curl -sS -X POST https://intel.twzrd.xyz/v1/intel/preflight \
+  -H 'content-type: application/json' \
+  -d '{"seller_wallet":"GFpLvocNdEjnSsLH3VJQL6wGcjGxTbUBrj6fqN3Qe1Gs","price_usdc":0.01,"agent_intent":"preflight"}'
+```
+
+Sample cards are fictional and labeled. They illustrate decision shape, not real third-party verification. TWZRD does not claim legal identity attestation; it scores observed settlement / counterparty risk for agent payments.
+
+Not affiliated with or endorsed by Meta Platforms, Inc. Public CDO quotes about wanting an external verification plug-in are market context only.
+
+Human UI: `/attest` · Machine: `/api/attestation`
 
 ## Path B runbook (`path_b_runbook`)
 
@@ -116,15 +140,16 @@ Source extract (optional mirror): https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-br
 | Path | Purpose |
 |---|---|
 | GET /llms.txt | This guide |
-| GET /path-b | Human Path B runbook (screen-share) |
+| GET /attest | Human attestation demo |
+| GET /api/attestation | Attestation JSON |
+| GET /path-b | Human Path B runbook |
 | GET /api/path-b | Path B runbook JSON |
-| GET /api/path-b?format=md | Path B runbook markdown |
-| GET /api/board | Full board JSON (live + playbook + cf_strategy + path_b_runbook) |
-| GET /api/board/status | Compact live status + cf_strategy summary |
-| GET /api/board/moves | Playbook moves only |
-| GET /api/board/moves?phase=truth&horizon=this_week&impact=critical | Filtered moves |
-| GET /api/openapi.json | OpenAPI 3.1 for this service |
-| GET /api/intel-health | Proxied intel.twzrd.xyz/health |
+| GET /api/path-b?format=md | Path B markdown |
+| GET /api/board | Full board (live + playbook + cf_strategy + path_b + attestation) |
+| GET /api/board/status | Compact live status |
+| GET /api/board/moves | Playbook moves |
+| GET /api/openapi.json | OpenAPI 3.1 |
+| GET /api/intel-health | Proxied intel health |
 
 Query params on `/api/board` and `/api/board/moves`:
 - `phase` — truth | wedge | proof | distribution | convert
@@ -184,5 +209,5 @@ Expected: signer_invocation_count=0 payment_retry_count=0
 - https://twzrd.xyz — Product front door
 - https://cdn.jsdelivr.net/gh/twzrd-sol/sprat-brief@main/sprat.json — SPRAT source extract (history only, not a second host)
 
-Agents: do not scrape the HTML UI. Use `/api/board`, `/api/path-b`, or `/api/board/status`.
+Agents: do not scrape the HTML UI. Use `/api/board`, `/api/attestation`, `/api/path-b`.
 SPRAT GitHub is extract only — start here at Live Board, not SPRAT.
